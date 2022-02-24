@@ -1,0 +1,46 @@
+# Copyright 2022 VMware
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#@ load("@ytt:data", "data")
+#@ load("@ytt:assert", "assert")
+
+#@ data.values.image or assert.fail("missing 'image' value")
+#@ data.values.released_at or assert.fail("missing 'released_at' value")
+#@ data.values.version or assert.fail("missing 'version' value")
+
+---
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: #@ data.values.name + '.' + data.values.version
+spec:
+  refName: #@ data.values.name
+  version: #@ data.values.version
+  releaseNotes: #@ "https://github.com/vmware-tanzu/cartographer/releases/tag/" + data.values.version
+  releasedAt: #@ data.values.released_at
+  valuesSchema:
+    openAPIv3:
+      title: #@ data.values.name + '.' + data.values.version + ' values schema'
+      properties: {}
+  template:
+    spec:
+      fetch:
+        - imgpkgBundle:
+            image: #@ data.values.image
+      template:
+        - ytt:
+            ignoreUnknownComments: true
+        - kbld: {}
+      deploy:
+        - kapp: {}
