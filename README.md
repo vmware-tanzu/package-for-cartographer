@@ -115,13 +115,7 @@ For documentation specific to Cartographer, check out
 
 ## Contributing
 
-The package-for-cartographer project team welcomes contributions from the
-community. Before you start working with package-for-cartographer, please read
-our [Developer Certificate of Origin](https://cla.vmware.com/dco). All
-contributions to this repository must be signed as described on that page. Your
-signature certifies that you wrote the patch or have the right to pass it on as
-an open-source patch. For more detailed information, refer to
-[CONTRIBUTING.md](CONTRIBUTING.md).
+See [./CONTRIBUTING.md](./CONTRIBUTING.md).
 
 
 ## License
