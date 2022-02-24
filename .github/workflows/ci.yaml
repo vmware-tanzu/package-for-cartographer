@@ -85,5 +85,5 @@ jobs:
         run: |
           docker login -u vmware-tanzu -p $GITHUB_TOKEN ghcr.io
 
-          RELEASE_VERSION=$GITHUB_REF_NAME ./hack/bundle.sh
+          RELEASE_VERSION=${GITHUB_REF_NAME#v} ./hack/bundle.sh
           ./hack/publish.sh $GITHUB_REF_NAME
