@@ -9,6 +9,12 @@ For any questions about the CLA process, please refer to our
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Packaging new versions of Cartographer](#packaging-new-versions-of-cartographer)
+  - [1. `vendir` update update](#1-vendir-update-update)
+  - [2. `vendir sync`](#2-vendir-sync)
+  - [3. Pull request](#3-pull-request)
+  - [4. Tag](#4-tag)
+  - [Promote the release](#promote-the-release)
 - [Contribution Flow](#contribution-flow)
   - [Staying In Sync With Upstream](#staying-in-sync-with-upstream)
   - [Updating pull requests](#updating-pull-requests)
