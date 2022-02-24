@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -57,7 +56,11 @@ push() {
                 --prerelease \
                 --title $version \
                 --notes-file $release_body \
-		./release/*.yaml
+                ./release/bundle.tar \
+                ./release/package-install.yaml \
+                ./release/package-metadata.yaml \
+                ./release/package.yaml \
+                ./README.md
 }
 
 main "$@"
