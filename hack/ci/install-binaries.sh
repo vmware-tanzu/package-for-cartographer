@@ -128,11 +128,11 @@ install_tanzu() {
 }
 
 install_grype() {
-        local url=https://github.com/anchore/grype/releases/download/v${GRYPE_VERSION}/grype_${GRYPE_VERSION}_linux_amd64.tar.gz
-        local fname=grype_${GRYPE_VERSION}_linux_amd64.tar.gz
+        local url=https://github.com/anchore/grype/releases/download/v${grype_version}/grype_${grype_version}_linux_amd64.tar.gz
+        local fname=grype_${grype_version}_linux_amd64.tar.gz
 
         curl -sSOL $url
-        echo "${GRYPE_CHECKSUM}  $fname" | sha256sum -c
+        echo "${grype_checksum}  $fname" | sha256sum -c
         tar xzf $fname
 
         install -m 0755 ./grype /usr/local/bin
