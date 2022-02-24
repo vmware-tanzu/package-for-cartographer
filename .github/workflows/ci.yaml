@@ -49,6 +49,12 @@ jobs:
           kubectl apply -f ./release
 
 
+      - name: Grype scan
+        continue-on-error: true
+        run: |-
+          ./hack/scan.sh
+
+
       - name: Install Package
         run: |-
           tanzu package install \
@@ -75,7 +81,7 @@ jobs:
       - name: Install base dependencies
         run: |-
           sudo apt update && sudo apt install -y curl tar
-          ./hack/ci/install-binaries.sh imgpkg kbld ytt kapp gh
+          ./hack/ci/install-binaries.sh imgpkg kbld ytt kapp gh grype
 
 
       - name: Release

@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -21,19 +20,21 @@ set -o pipefail
 readonly gh_checksum=76bd37160c61cf668b96a362ebc01d23736ebf94ec9dfe3090cacea37fd3b3fb
 readonly gh_version=2.2.0
 readonly grype_checksum=a0aaae28792a70fd465301cef0f3dc4bd09c2e707208f7a576e4085c8ea861d4
+readonly grype_checksum=ae228669cb5fa34eeb40e3c205e2e1f2dba37c189e1196b84e19c4d4f7a3b8e4
 readonly grype_version=0.27.2
+readonly grype_version=0.33.0
+readonly imgpkg_checksum=14ce0b48a3a00352cdf0ef263aa98a9bcd90d5ea8634fdf6b88016e2a08f09d1
+readonly imgpkg_version=0.25.0
 readonly kapp_checksum=5d5c4274a130f2fd5ad11ddd8fb3e0f647c8598ba25711360207fc6eab72f6be
 readonly kapp_version=0.42.0
+readonly kbld_checksum=de546ac46599e981c20ad74cd2deedf2b0f52458885d00b46b759eddb917351a
+readonly kbld_version=0.32.0
 readonly ko_checksum=0b1fa3ec34f095675d1b214e6bfde1e5b73a199378e830830ec81fec3484645e
 readonly ko_version=0.9.3
 readonly tanzu_checksum=25e19a1e90b540dbc4fd337574a122c8450c574f5d9ed4464bb146beea8c628a
 readonly tanzu_version=0.17.0
 readonly ytt_checksum=2ca800c561464e0b252e5ee5cacff6aa53831e65e2fb9a09cf388d764013c40d
 readonly ytt_version=0.38.0
-readonly kbld_checksum=de546ac46599e981c20ad74cd2deedf2b0f52458885d00b46b759eddb917351a
-readonly kbld_version=0.32.0
-readonly imgpkg_checksum=14ce0b48a3a00352cdf0ef263aa98a9bcd90d5ea8634fdf6b88016e2a08f09d1
-readonly imgpkg_version=0.25.0
 
 main() {
         cd $(mktemp -d)
@@ -126,6 +127,17 @@ install_tanzu() {
 
         mv tanzu-core-linux_amd64 /usr/local/bin/tanzu
         tanzu init
+}
+
+install_grype() {
+        local url=https://github.com/anchore/grype/releases/download/v${GRYPE_VERSION}/grype_${GRYPE_VERSION}_linux_amd64.tar.gz
+        local fname=grype_${GRYPE_VERSION}_linux_amd64.tar.gz
+
+        curl -sSOL $url
+        echo "${GRYPE_CHECKSUM}  $fname" | sha256sum -c
+        tar xzf $fname
+
+        install -m 0755 ./grype /usr/local/bin
 }
 
 main "$@"
