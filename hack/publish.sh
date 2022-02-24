@@ -37,7 +37,7 @@ craft_release_body() {
         local checksums_file=$(mktemp)
 
         pushd release
-        sha256sum *.yaml >$checksums_file
+        sha256sum * >$checksums_file
         popd
 
         cat <<-EOF >$release_body
