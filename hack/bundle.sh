@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 set -o errexit
 set -o nounset
 
@@ -25,13 +24,12 @@ readonly SCRATCH=${SCRATCH:-$(mktemp -d)}
 readonly RELEASE_DIR=${RELEASE_DIR:-$root/release}
 readonly RELEASE_DATE=${RELEASE_DATE:-$(TZ=UTC date +"%Y-%m-%dT%H:%M:%SZ")}
 
-
 main() {
         cd $root
 
         show_vars
         create_imgpkg_bundle
-	create_carvel_packaging_objects
+        create_carvel_packaging_objects
         populate_release_dir
 }
 
@@ -49,18 +47,23 @@ create_imgpkg_bundle() {
         mkdir -p $SCRATCH/bundle/{.imgpkg,config}
 
         cp -r ./packaging/{objects,overlays} $SCRATCH/bundle/config
-	kbld \
+        kbld \
                 -f ./src/cartographer/upstream \
-		--imgpkg-lock-output $SCRATCH/bundle/.imgpkg/images.yml \
-		> $SCRATCH/bundle/config/cartographer.yaml
+                --imgpkg-lock-output $SCRATCH/bundle/.imgpkg/images.yml \
+                >$SCRATCH/bundle/config/cartographer.yaml
 
-	imgpkg push -f $SCRATCH/bundle \
-		--bundle $BUNDLE \
-		--lock-output $SCRATCH/bundle.lock.yaml
+        imgpkg push -f $SCRATCH/bundle \
+                --bundle $BUNDLE \
+                --lock-output $SCRATCH/bundle.initial.lock.yaml
 
-	imgpkg copy \
-		--bundle $(_image_from_lockfile $SCRATCH/bundle.lock.yaml) \
-		--to-tar $SCRATCH/bundle.tar
+        imgpkg copy \
+                --bundle $(_image_from_lockfile $SCRATCH/bundle.initial.lock.yaml) \
+                --to-tar $SCRATCH/bundle.tar
+
+        imgpkg copy \
+                --tar $SCRATCH/bundle.tar \
+                --to-repo $BUNDLE \
+                --lock-output $SCRATCH/bundle.lock.yaml
 }
 
 create_carvel_packaging_objects() {
@@ -81,7 +84,6 @@ create_carvel_packaging_objects() {
 
 }
 
-
 populate_release_dir() {
         mkdir -p $RELEASE_DIR
         cp -r $SCRATCH/package/* $RELEASE_DIR
@@ -90,12 +92,10 @@ populate_release_dir() {
         ls $RELEASE_DIR
 }
 
-
 _image_from_lockfile() {
         local lockfile=$1
 
         awk -F"image: " '{if ($2) print $2;}' $lockfile
 }
-
 
 main "$@"
