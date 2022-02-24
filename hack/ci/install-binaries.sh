@@ -19,9 +19,7 @@ set -o pipefail
 
 readonly gh_checksum=76bd37160c61cf668b96a362ebc01d23736ebf94ec9dfe3090cacea37fd3b3fb
 readonly gh_version=2.2.0
-readonly grype_checksum=a0aaae28792a70fd465301cef0f3dc4bd09c2e707208f7a576e4085c8ea861d4
 readonly grype_checksum=ae228669cb5fa34eeb40e3c205e2e1f2dba37c189e1196b84e19c4d4f7a3b8e4
-readonly grype_version=0.27.2
 readonly grype_version=0.33.0
 readonly imgpkg_checksum=14ce0b48a3a00352cdf0ef263aa98a9bcd90d5ea8634fdf6b88016e2a08f09d1
 readonly imgpkg_version=0.25.0
