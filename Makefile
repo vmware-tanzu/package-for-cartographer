@@ -13,3 +13,8 @@ install:
 		-f ./src/ootb-supply-chains \
 		--data-value registry.server=foo \
 		--data-value registry.repository=bah
+
+
+check:
+	hack/check/check-mdlint.sh
+	hack/check/check-yaml.sh
