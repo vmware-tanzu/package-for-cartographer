@@ -12,11 +12,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 ## Overview
 
 [carvel]-based Packaging of [Cartographer].
-
 
 ## Pre-requisites
 
@@ -24,29 +22,25 @@
 - [Tanzu CLI]
 - [cert-manager]
 
-
 ## Installation
 
-0. Submit the Package and PackageMetadata objects to the cluster
-
+First, submit the Package and PackageMetadata objects to the cluster
 
 ```bash
 kubectl apply \
   -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v0.0.0/package.yaml
   -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v0.0.0/package-metadata.yaml
 ```
-```console
-packagemetadata.data.packaging.carvel.dev/cartographer.community.tanzu.vmware.com created
-package.data.packaging.carvel.dev/cartographer.community.tanzu.vmware.com.0.0.0 created
-```
 
-1. Install the package
+With Package and PackageMetadata added to the Kubernetes cluster, proceed with
+installing the package:
 
 ```bash
 tanzu package install cartographer \
   --package-name cartographer.community.tanzu.vmware.com \
   --version 0.0.0
 ```
+
 ```console
 \ Installing package 'cartographer.community.tanzu.vmware.com'
 | Getting package metadata for 'cartographer.community.tanzu.vmware.com'
@@ -57,7 +51,6 @@ tanzu package install cartographer \
 / Waiting for 'PackageInstall' reconciliation for 'cartographer'
 \ 'PackageInstall' resource install status: Reconciling
 
-
  Added installed package 'cartographer'
 ```
 
@@ -66,6 +59,7 @@ Once installed, the following objects can be found in the cluster:
 ```bash
 kapp inspect -a cartographer-ctrl
 ```
+
 ```console
 Resources in app 'cartographer-ctrl'
 
@@ -102,7 +96,6 @@ cartographer-system  cartographer-controller                  Deployment
 ^
 ```
 
-
 ## Documentation
 
 This repository is solely concerned with the Packaging of Cartographer to be
@@ -112,20 +105,16 @@ For documentation specific to Cartographer, check out
 [cartographer.sh](https://cartographer.sh) and the main repository
 [vmware-tanzu/cartographer](https://github.com/vmware-tanzu/cartographer).
 
-
 ## Contributing
 
 See [./CONTRIBUTING.md](./CONTRIBUTING.md).
 
-
 ## License
 
 See [./LICENSE](./LICENSE).
-
 
 [carvel]: https://carvel.dev/
 [Cartographer]: https://cartographer.sh
 [kapp-controller]: https://github.com/vmware-tanzu/carvel-kapp-controller
 [Tanzu CLI]: https://github.com/vmware-tanzu/tanzu-framework
 [cert-manager]: https://github.com/cert-manager/cert-manager
-

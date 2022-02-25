@@ -49,6 +49,11 @@ jobs:
           kubectl apply -f ./release
 
 
+      - name: Check all YAML and README Markdown
+        run: |-
+          make check
+
+
       - name: Grype scan
         continue-on-error: true
         run: |-
