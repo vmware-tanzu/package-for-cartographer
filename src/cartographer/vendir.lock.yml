@@ -18,5 +18,5 @@ directories:
   - githubRelease:
       url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/59538196
     path: .
-  path: ./upstream
+  path: ./config/upstream
 kind: LockConfig
