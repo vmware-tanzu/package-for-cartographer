@@ -27,18 +27,22 @@
 First, submit the Package and PackageMetadata objects to the cluster
 
 ```bash
+CARTOGRAPHER_VERSION=0.2.2
+
 kubectl apply \
-  -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v0.0.0/package.yaml
-  -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v0.0.0/package-metadata.yaml
+  -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v$CARTOGRAPHER_VERSION/package.yaml
+  -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v$CARTOGRAPHER_VERSION/package-metadata.yaml
 ```
 
 With Package and PackageMetadata added to the Kubernetes cluster, proceed with
 installing the package:
 
 ```bash
+CARTOGRAPHER_VERSION=0.2.2
+
 tanzu package install cartographer \
   --package-name cartographer.community.tanzu.vmware.com \
-  --version 0.0.0
+  --version $CARTOGRAPHER_VERSION
 ```
 
 ```console
