@@ -19,12 +19,6 @@ The following table shows the providers this package can work with.
 
 The Cartographer package has no configurable properties.
 
-## Pre-requisites
-
-- [kapp-controller]
-- [Tanzu CLI]
-- [cert-manager]
-
 ## Installation
 
 The Cartographer package requires use of cert-manager for certificate
@@ -46,15 +40,15 @@ generation.
 2. Install the Cartographer package
 
    ```shell
-   tanzu package install contour \
+   tanzu package install cartographer \
       --package-name cartographer.community.tanzu.vmware.com \
       --version ${CARTOGRAPHER_PACKAGE_VERSION}
    ```
 
    > You can get the `${CARTOGRAPHER_PACKAGE_VERSION}` from running `tanzu
-   > package available list contour.community.tanzu.vmware.com`. Specifying a
-   > namespace may be required depending on where your package repository was
-   > installed.
+   > package available list cartographer.community.tanzu.vmware.com`.
+   > Specifying a namespace may be required depending on where your package
+   > repository was installed.
 
 ## Documentation
 
