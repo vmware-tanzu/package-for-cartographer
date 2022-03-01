@@ -1,20 +1,23 @@
-# Package for Cartographer
+# Cartographer
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+Cartographer allows you to create secure and reusable supply chains that define
+all of your application CI and CD in one place, in cluster.
 
-- [Overview](#overview)
-- [Pre-requisites](#pre-requisites)
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
+## Components
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+* cartographer
 
-## Overview
+## Supported Providers
 
-[carvel]-based Packaging of [Cartographer].
+The following table shows the providers this package can work with.
+
+| AWS  | Azure | vSphere | Docker |
+|------|-------|---------|--------|
+| ✅   | ✅    | ✅      | ✅     |
+
+## Configuration
+
+The Cartographer package has no configurable properties.
 
 ## Pre-requisites
 
@@ -24,98 +27,40 @@
 
 ## Installation
 
-First, submit the Package and PackageMetadata objects to the cluster
+The Cartographer package requires use of cert-manager for certificate
+generation.
 
-```bash
-CARTOGRAPHER_VERSION=0.2.2
+1. Install cert-manager Package
 
-kubectl apply \
-  -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v$CARTOGRAPHER_VERSION/package.yaml
-  -f https://github.com/vmware-tanzu/package-for-cartographer/releases/download/v$CARTOGRAPHER_VERSION/package-metadata.yaml
-```
+   ```shell
+   tanzu package install cert-manager \
+      --package-name cert-manager.community.tanzu.vmware.com \
+      --version ${CERT_MANAGER_PACKAGE_VERSION}
+   ```
 
-With Package and PackageMetadata added to the Kubernetes cluster, proceed with
-installing the package:
+   > You can get the `${CERT_MANAGER_PACKAGE_VERSION}` from running `tanzu
+   > package available list cert-manager.community.tanzu.vmware.com`.
+   > Specifying a namespace may be required depending on where your package
+   > repository was installed.
 
-```bash
-CARTOGRAPHER_VERSION=0.2.2
+2. Install the Cartographer package
 
-tanzu package install cartographer \
-  --package-name cartographer.community.tanzu.vmware.com \
-  --version $CARTOGRAPHER_VERSION
-```
+   ```shell
+   tanzu package install contour \
+      --package-name cartographer.community.tanzu.vmware.com \
+      --version ${CARTOGRAPHER_PACKAGE_VERSION}
+   ```
 
-```console
-\ Installing package 'cartographer.community.tanzu.vmware.com'
-| Getting package metadata for 'cartographer.community.tanzu.vmware.com'
-| Creating service account 'cartographer-default-sa'
-| Creating cluster admin role 'cartographer-default-cluster-role'
-| Creating cluster role binding 'cartographer-default-cluster-rolebinding'
-| Creating package resource
-/ Waiting for 'PackageInstall' reconciliation for 'cartographer'
-\ 'PackageInstall' resource install status: Reconciling
-
- Added installed package 'cartographer'
-```
-
-Once installed, the following objects can be found in the cluster:
-
-```bash
-kapp inspect -a cartographer-ctrl
-```
-
-```console
-Resources in app 'cartographer-ctrl'
-
-Namespace            Name                                     Kind
-(cluster)            cartographer-cluster-admin               ClusterRoleBinding
-^                    cartographer-controller-admin            ClusterRole
-^                    cartographer-system                      Namespace
-^                    cartographer-user-admin                  ClusterRole
-^                    cartographer-user-view                   ClusterRole
-^                    clusterconfigtemplates.carto.run         CustomResourceDefinition
-^                    clusterdeliveries.carto.run              CustomResourceDefinition
-^                    clusterdeploymenttemplates.carto.run     CustomResourceDefinition
-^                    clusterimagetemplates.carto.run          CustomResourceDefinition
-^                    clusterruntemplates.carto.run            CustomResourceDefinition
-^                    clustersourcetemplates.carto.run         CustomResourceDefinition
-^                    clustersupplychains.carto.run            CustomResourceDefinition
-^                    clustersupplychainvalidator              ValidatingWebhookConfiguration
-^                    clustertemplates.carto.run               CustomResourceDefinition
-^                    deliverables.carto.run                   CustomResourceDefinition
-^                    deliveryvalidator                        ValidatingWebhookConfiguration
-^                    runnables.carto.run                      CustomResourceDefinition
-^                    workloads.carto.run                      CustomResourceDefinition
-cartographer-system  cartographer-controller                  Deployment
-^                    cartographer-controller                  ServiceAccount
-^                    cartographer-controller-f574b6649        ReplicaSet
-^                    cartographer-controller-f574b6649-54zz2  Pod
-^                    cartographer-webhook                     Certificate
-^                    cartographer-webhook                     Endpoints
-^                    cartographer-webhook                     Secret
-^                    cartographer-webhook                     Service
-^                    cartographer-webhook-j4cdt               EndpointSlice
-^                    cartographer-webhook-n6z2r               CertificateRequest
-^                    private-registry-credentials             Secret
-^
-```
+   > You can get the `${CARTOGRAPHER_PACKAGE_VERSION}` from running `tanzu
+   > package available list contour.community.tanzu.vmware.com`. Specifying a
+   > namespace may be required depending on where your package repository was
+   > installed.
 
 ## Documentation
-
-This repository is solely concerned with the Packaging of Cartographer to be
-installed in a Kubernetes clusters making use of Carvel Packaging primitives.
 
 For documentation specific to Cartographer, check out
 [cartographer.sh](https://cartographer.sh) and the main repository
 [vmware-tanzu/cartographer](https://github.com/vmware-tanzu/cartographer).
-
-## Contributing
-
-See [./CONTRIBUTING.md](./CONTRIBUTING.md).
-
-## License
-
-See [./LICENSE](./LICENSE).
 
 [carvel]: https://carvel.dev/
 [Cartographer]: https://cartographer.sh
