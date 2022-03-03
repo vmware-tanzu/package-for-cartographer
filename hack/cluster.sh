@@ -31,6 +31,7 @@ main() {
                 start)
                         start_local_registry
                         start_kind_cluster
+                        setup_rbac
                         ;;
 
                 apply-dependencies)
@@ -103,6 +104,10 @@ EOF
         kubectl config set-context --current --namespace default
         kubectl config get-contexts
         kubectl cluster-info
+}
+
+setup_rbac() {
+        kapp deploy --yes -a rbac -f ./rbac
 }
 
 install_cartographer() {
