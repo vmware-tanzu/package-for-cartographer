@@ -63,7 +63,7 @@ jobs:
       - name: Install Package
         run: |-
           tanzu package install \
-            --package-name cartographer.community.tanzu.vmware.com \
+            --package-name cartographer.tanzu.vmware.com \
             --version 0.0.0 \
             cartographer
 

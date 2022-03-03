@@ -16,7 +16,7 @@
 
 #@data/values
 ---
-name: cartographer.community.tanzu.vmware.com
+name: cartographer.tanzu.vmware.com
 version:
 image:
 released_at:
