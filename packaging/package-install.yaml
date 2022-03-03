@@ -31,3 +31,4 @@ spec:
         identifiers:
           - 'dev'
           - 'rc'
+          - 'build'
