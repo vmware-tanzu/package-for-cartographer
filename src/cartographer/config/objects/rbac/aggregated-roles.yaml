@@ -1,0 +1,86 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cartographer-app-editor
+  labels:
+    apps.tanzu.vmware.com/aggregate-to-app-editor: "true"
+rules:
+- apiGroups: ["carto.run"]
+  resources:
+  - "deliverables"
+  - "workloads"
+  verbs:
+  - "create"
+  - "delete"
+  - "deletecollection"
+  - "patch"
+  - "update"
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cartographer-app-viewer
+  labels:
+    apps.tanzu.vmware.com/aggregate-to-app-viewer: "true"
+rules:
+- apiGroups: ["carto.run"]
+  resources:
+  - "deliverables"
+  - "runnables"
+  - "workloads"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cartographer-app-viewer-cluster-access
+  labels:
+    apps.tanzu.vmware.com/aggregate-to-app-viewer-cluster-access: "true"
+rules:
+- apiGroups: ["carto.run"]
+  resources:
+  - "clusterconfigtemplates"
+  - "clusterdeliveries"
+  - "clusterdeploymenttemplates"
+  - "clusterimagetemplates"
+  - "clusterruntemplates"
+  - "clustersourcetemplates"
+  - "clustersupplychains"
+  - "clustertemplates"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cartographer-app-operator-cluster-access
+  labels:
+    apps.tanzu.vmware.com/aggregate-to-app-operator-cluster-access: "true"
+rules:
+- apiGroups: ["carto.run"]
+  resources:
+  - "clusterconfigtemplates"
+  - "clusterdeliveries"
+  - "clusterdeploymenttemplates"
+  - "clusterimagetemplates"
+  - "clusterruntemplates"
+  - "clustersourcetemplates"
+  - "clustersupplychains"
+  - "clustertemplates"
+  verbs:
+  - "create"
+  - "delete"
+  - "deletecollection"
+  - "get"
+  - "list"
+  - "patch"
+  - "update"
+  - "watch"

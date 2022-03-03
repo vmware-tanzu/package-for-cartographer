@@ -70,7 +70,10 @@ jobs:
 
       - name: Run tests
         run: |-
-          ./tests/01-test-basic.sh
+          for test_script in ./tests/*.sh; do
+            echo -e "\t Running test $test_script"
+            $test_script
+          done
 
 
   release:
