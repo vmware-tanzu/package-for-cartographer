@@ -16,7 +16,7 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - githubRelease:
-      url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/59538196
+      url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/60917802
     path: .
   path: ./config/upstream
 kind: LockConfig
