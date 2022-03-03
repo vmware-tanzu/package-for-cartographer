@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-editor
+  annotations:
+    kapp.k14s.io/change-group: "carto.run/sa"
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-viewer
+  annotations:
+    kapp.k14s.io/change-group: "carto.run/sa"
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-viewer-cluster-access
+  annotations:
+    kapp.k14s.io/change-group: "carto.run/sa"
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-operator-cluster-access
+  annotations:
+    kapp.k14s.io/change-group: "carto.run/sa"
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-editor
+  annotations:
+    kubernetes.io/service-account.name: app-editor
+    kapp.k14s.io/change-group: "carto.run/sa-secret"
+    kapp.k14s.io/change-rule: "upsert after upserting carto.run/sa"
+type: kubernetes.io/service-account-token
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-viewer
+  annotations:
+    kubernetes.io/service-account.name: app-viewer
+    kapp.k14s.io/change-group: "carto.run/sa-secret"
+    kapp.k14s.io/change-rule: "upsert after upserting carto.run/sa"
+type: kubernetes.io/service-account-token
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-viewer-cluster-access
+  annotations:
+    kubernetes.io/service-account.name: app-viewer-cluster-access
+    kapp.k14s.io/change-group: "carto.run/sa-secret"
+    kapp.k14s.io/change-rule: "upsert after upserting carto.run/sa"
+type: kubernetes.io/service-account-token
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-operator-cluster-access
+  annotations:
+    kubernetes.io/service-account.name: app-operator-cluster-access
+    kapp.k14s.io/change-group: "carto.run/sa-secret"
+    kapp.k14s.io/change-rule: "upsert after upserting carto.run/sa"
+type: kubernetes.io/service-account-token
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-editor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cartographer-app-editor
+subjects:
+- kind: ServiceAccount
+  name: app-editor
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cartographer-app-viewer
+subjects:
+- kind: ServiceAccount
+  name: app-viewer
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-viewer-cluster-access
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cartographer-app-viewer-cluster-access
+subjects:
+- kind: ServiceAccount
+  name: app-viewer-cluster-access
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-operator-cluster-access
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cartographer-app-operator-cluster-access
+subjects:
+- kind: ServiceAccount
+  name: app-operator-cluster-access
+---
+
+
