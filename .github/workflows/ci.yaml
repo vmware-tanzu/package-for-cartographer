@@ -94,10 +94,12 @@ jobs:
 
       - name: Release
         env:
-          BUNDLE: ghcr.io/vmware-tanzu/package-for-cartographer
+          BUNDLE: projectcartographer/package-for-cartographer
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: projectcartographer
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          docker login -u vmware-tanzu -p $GITHUB_TOKEN ghcr.io
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
           RELEASE_VERSION=${GITHUB_REF_NAME#v} ./hack/bundle.sh
           ./hack/publish.sh $GITHUB_REF_NAME
