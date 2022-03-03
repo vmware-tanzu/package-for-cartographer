@@ -31,6 +31,8 @@ readonly ko_checksum=0b1fa3ec34f095675d1b214e6bfde1e5b73a199378e830830ec81fec348
 readonly ko_version=0.9.3
 readonly tanzu_checksum=25e19a1e90b540dbc4fd337574a122c8450c574f5d9ed4464bb146beea8c628a
 readonly tanzu_version=0.17.0
+readonly whocan_checksum=3ba4a529e2f759b13030e5fc803639fda6e13fd05ed0d8bda1c722459a298f32
+readonly whocan_version=0.4.0
 readonly ytt_checksum=2ca800c561464e0b252e5ee5cacff6aa53831e65e2fb9a09cf388d764013c40d
 readonly ytt_version=0.38.0
 
@@ -136,6 +138,17 @@ install_grype() {
         tar xzf $fname
 
         install -m 0755 ./grype /usr/local/bin
+}
+
+install_whocan() {
+        local url=https://github.com/aquasecurity/kubectl-who-can/releases/download/v${whocan_version}/kubectl-who-can_linux_x86_64.tar.gz
+        local fname=kubectl-who-can_linux_x86_64.tar.gz
+
+        curl -sSOL $url
+        echo "${whocan_checksum}  $fname" | sha256sum -c
+        tar xzf $fname kubectl-who-can
+
+        install -m 0755 ./kubectl-who-can /usr/local/bin
 }
 
 main "$@"

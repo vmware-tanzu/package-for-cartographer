@@ -10,7 +10,7 @@ main() {
 
         show_vars
         setup
-        test_app_viewer
+        check_permissions
 }
 
 show_vars() {
@@ -24,46 +24,39 @@ setup() {
 
         kapp deploy --yes -a $name -f ./02-$name.yaml
         # trap "kapp delete -a $name --yes" EXIT
-
-        # wait for the tokens
 }
 
-test_app_viewer() {
+check_permissions() {
         local sa=app-viewer
 
-        _prepare_kubeconfig $sa
-
-        export KUBECONFIG=$scratch/$sa
-        kubectl auth can-i get workload
-        kubectl auth can-i create workload
-        kubectl auth can-i delete workload
+        _assert app-viewer get workload
+        _assert app-editor create workload
+        _assert app-viewer-cluster-access get clusterdeliveries
+        _assert app-operator-cluster-access create clusterdeliveries
 }
 
-_prepare_kubeconfig() {
-        local sa=$1
-        local user=kind-kind
-        local original_kubeconfig=~/.kube/config
-        local kubeconfig=$scratch/$sa
+_assert() {
+        local who=$1
+        local verb=$2
+        local resource=$3
 
-        local token
-        token=$(_get_token $sa)
+        if [[ "$(_can_it $who $verb $resource)" == "$who" ]]; then
+                echo "GOOD! $who can $verb $resource"
+                return 0
+        fi
 
-        cp $original_kubeconfig $kubeconfig
-
-        KUBECONFIG=$kubeconfig \
-                kubectl config set-credentials \
-                        $user --token=$token
+        echo "FAIL. $who should $verb $resource but can't."
+        exit 1
 }
 
-_get_token() {
-        local sa=$1
+_can_it() {
+        local who=$1
+        local verb=$2
+        local resource=$3
 
-        local token_base64
-        token_base64=$(kubectl get secret $sa -o jsonpath={.data.token})
-
-        printf $token_base64 | base64 --decode
+        kubectl-who-can $verb $resource -o json |
+                jq -r '.roleBindings[].name' |
+                grep "^${who}$"
 }
-
 
 main "$@"
-
