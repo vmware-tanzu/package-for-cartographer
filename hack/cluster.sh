@@ -18,13 +18,8 @@ set -o nounset
 
 readonly ROOT=$(cd $(dirname $0)/.. && pwd)
 
-readonly CARTOGRAPHER_VERSION=0.2.2
-readonly CERT_MANAGER_VERSION=1.5.3
+readonly CERT_MANAGER_VERSION=1.7.1
 readonly KAPP_CONTROLLER_VERSION=0.32.0
-readonly KNATIVE_SERVING_VERSION=0.26.0
-readonly KPACK_VERSION=0.5.1
-readonly SECRETGEN_CONTROLLER_VERSION=0.6.0
-readonly SOURCE_CONTROLLER_VERSION=0.17.0
 
 main() {
         cd $ROOT/hack
@@ -110,11 +105,10 @@ EOF
         kubectl cluster-info
 }
 
-
 install_cartographer() {
-	kubectl create clusterrolebinding default-admin \
-		--clusterrole=cluster-admin \
-		--serviceaccount=default:default || true
+        kubectl create clusterrolebinding default-admin \
+                --clusterrole=cluster-admin \
+                --serviceaccount=default:default || true
         BUNDLE=$(local_ip_addr):5000/bundle $ROOT/hack/bundle.sh
         kapp deploy -a cartographer -f $ROOT/release
 }
