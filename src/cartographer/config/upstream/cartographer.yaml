@@ -100,7 +100,17 @@ spec:
     singular: clusterdelivery
   scope: Cluster
   versions:
-    - name: v1alpha1
+    - additionalPrinterColumns:
+        - jsonPath: .status.conditions[?(@.type=='Ready')].status
+          name: Ready
+          type: string
+        - jsonPath: .status.conditions[?(@.type=='Ready')].reason
+          name: Reason
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha1
       schema:
         openAPIV3Schema:
           properties:
@@ -199,14 +209,61 @@ spec:
                               - ClusterSourceTemplate
                               - ClusterDeploymentTemplate
                               - ClusterTemplate
+                              - ClusterConfigTemplate
                             type: string
                           name:
                             description: Name of the template to apply
                             minLength: 1
                             type: string
+                          options:
+                            description: Options is a list of template names and Selectors. The templates must all be of type Kind. A template will be selected if the deliverable matches the specified Selector. Only one template can be selected. Only one of Name and Options can be specified.
+                            items:
+                              properties:
+                                name:
+                                  description: Name of the template to apply
+                                  minLength: 1
+                                  type: string
+                                selector:
+                                  description: Selector is a field query over a workload or deliverable resource.
+                                  properties:
+                                    matchFields:
+                                      description: MatchFields is a list of field selector requirements. The requirements are ANDed.
+                                      items:
+                                        properties:
+                                          key:
+                                            description: 'Key is the JSON path in the workload to match against. e.g. for workload: "workload.spec.source.git.url", e.g. for deliverable: "deliverable.spec.source.git.url"'
+                                            minLength: 1
+                                            type: string
+                                          operator:
+                                            description: Operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                                            enum:
+                                              - In
+                                              - NotIn
+                                              - Exists
+                                              - DoesNotExist
+                                            type: string
+                                          values:
+                                            description: Values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                          - key
+                                          - operator
+                                        type: object
+                                      minItems: 1
+                                      type: array
+                                  required:
+                                    - matchFields
+                                  type: object
+                              required:
+                                - name
+                                - selector
+                              type: object
+                            minItems: 2
+                            type: array
                         required:
                           - kind
-                          - name
                         type: object
                     required:
                       - name
@@ -218,6 +275,53 @@ spec:
                     type: string
                   description: 'Specifies the label key-value pairs used to select deliverables See: https://cartographer.sh/docs/v0.1.0/architecture/#selectors'
                   type: object
+                selectorMatchExpressions:
+                  description: 'Specifies the requirements used to select deliverables based on their labels See: FIXME update docs and provide link'
+                  items:
+                    description: A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                      - key
+                      - operator
+                    type: object
+                  type: array
+                selectorMatchFields:
+                  description: 'Specifies the requirements used to select deliverables based on their fields See: FIXME update docs and provide link'
+                  items:
+                    properties:
+                      key:
+                        description: 'Key is the JSON path in the workload to match against. e.g. for workload: "workload.spec.source.git.url", e.g. for deliverable: "deliverable.spec.source.git.url"'
+                        minLength: 1
+                        type: string
+                      operator:
+                        description: Operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                        enum:
+                          - In
+                          - NotIn
+                          - Exists
+                          - DoesNotExist
+                        type: string
+                      values:
+                        description: Values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                      - key
+                      - operator
+                    type: object
+                  type: array
                 serviceAccountRef:
                   description: "ServiceAccountName refers to the Service account with permissions to create resources submitted by the supply chain. \n If not set, Cartographer will use serviceAccountName from supply chain. \n If that is also not set, Cartographer will use the default service account in the workload's namespace."
                   properties:
@@ -232,7 +336,6 @@ spec:
                   type: object
               required:
                 - resources
-                - selector
               type: object
             status:
               description: 'Status conforms to the Kubernetes conventions: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#typical-status-properties'
@@ -633,7 +736,17 @@ spec:
     singular: clustersupplychain
   scope: Cluster
   versions:
-    - name: v1alpha1
+    - additionalPrinterColumns:
+        - jsonPath: .status.conditions[?(@.type=='Ready')].status
+          name: Ready
+          type: string
+        - jsonPath: .status.conditions[?(@.type=='Ready')].reason
+          name: Reason
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha1
       schema:
         openAPIV3Schema:
           properties:
@@ -740,12 +853,58 @@ spec:
                               - ClusterConfigTemplate
                             type: string
                           name:
-                            description: Name of the template to apply
+                            description: Name of the template to apply Only one of Name and Options can be specified.
                             minLength: 1
                             type: string
+                          options:
+                            description: Options is a list of template names and Selectors. The templates must all be of type Kind. A template will be selected if the workload matches the specified Selector. Only one template can be selected. Only one of Name and Options can be specified. Minimum number of items in list is two.
+                            items:
+                              properties:
+                                name:
+                                  description: Name of the template to apply
+                                  minLength: 1
+                                  type: string
+                                selector:
+                                  description: Selector is a field query over a workload or deliverable resource.
+                                  properties:
+                                    matchFields:
+                                      description: MatchFields is a list of field selector requirements. The requirements are ANDed.
+                                      items:
+                                        properties:
+                                          key:
+                                            description: 'Key is the JSON path in the workload to match against. e.g. for workload: "workload.spec.source.git.url", e.g. for deliverable: "deliverable.spec.source.git.url"'
+                                            minLength: 1
+                                            type: string
+                                          operator:
+                                            description: Operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                                            enum:
+                                              - In
+                                              - NotIn
+                                              - Exists
+                                              - DoesNotExist
+                                            type: string
+                                          values:
+                                            description: Values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                          - key
+                                          - operator
+                                        type: object
+                                      minItems: 1
+                                      type: array
+                                  required:
+                                    - matchFields
+                                  type: object
+                              required:
+                                - name
+                                - selector
+                              type: object
+                            minItems: 2
+                            type: array
                         required:
                           - kind
-                          - name
                         type: object
                     required:
                       - name
@@ -757,6 +916,53 @@ spec:
                     type: string
                   description: 'Specifies the label key-value pairs used to select workloads See: https://cartographer.sh/docs/v0.1.0/architecture/#selectors'
                   type: object
+                selectorMatchExpressions:
+                  description: 'Specifies the requirements used to select workloads based on their labels See: FIXME update docs and provide link'
+                  items:
+                    description: A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                      - key
+                      - operator
+                    type: object
+                  type: array
+                selectorMatchFields:
+                  description: 'Specifies the requirements used to select workloads based on their fields See: FIXME update docs and provide link'
+                  items:
+                    properties:
+                      key:
+                        description: 'Key is the JSON path in the workload to match against. e.g. for workload: "workload.spec.source.git.url", e.g. for deliverable: "deliverable.spec.source.git.url"'
+                        minLength: 1
+                        type: string
+                      operator:
+                        description: Operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                        enum:
+                          - In
+                          - NotIn
+                          - Exists
+                          - DoesNotExist
+                        type: string
+                      values:
+                        description: Values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                      - key
+                      - operator
+                    type: object
+                  type: array
                 serviceAccountRef:
                   description: "ServiceAccountName refers to the Service account with permissions to create resources submitted by the supply chain. \n If not set, Cartographer will use serviceAccountName from supply chain. \n If that is also not set, Cartographer will use the default service account in the workload's namespace."
                   properties:
@@ -771,7 +977,6 @@ spec:
                   type: object
               required:
                 - resources
-                - selector
               type: object
             status:
               description: 'Status conforms to the Kubernetes conventions: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#typical-status-properties'
@@ -936,6 +1141,9 @@ spec:
         - jsonPath: .status.conditions[?(@.type=='Ready')].reason
           name: Reason
           type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
       name: v1alpha1
       schema:
         openAPIV3Schema:
@@ -1058,6 +1266,102 @@ spec:
                   description: ObservedGeneration refers to the metadata.Generation of the spec that resulted in the current `status`.
                   format: int64
                   type: integer
+                resources:
+                  description: Resources contain references to the objects created by the Delivery and the templates used to create them. It also contains Inputs and Outputs that were passed between the templates as the Delivery was processed.
+                  items:
+                    properties:
+                      inputs:
+                        description: Inputs are references to resources that were used to template the object in StampedRef
+                        items:
+                          properties:
+                            name:
+                              description: Name is the name of the resource in the blueprint whose output the resource consumes as an input
+                              type: string
+                          required:
+                            - name
+                          type: object
+                        type: array
+                      name:
+                        description: Name is the name of the resource in the blueprint
+                        type: string
+                      outputs:
+                        description: Outputs are values from the object in StampedRef that can be consumed by other resources
+                        items:
+                          properties:
+                            digest:
+                              description: Digest is a sha256 of the full value of the output
+                              type: string
+                            lastTransitionTime:
+                              description: LastTransitionTime is a timestamp of the last time the value changed
+                              format: date-time
+                              type: string
+                            name:
+                              description: Name is the output type generated from the resource [url, revision, image or config]
+                              type: string
+                            preview:
+                              description: Preview is a preview of the value of the output
+                              type: string
+                          required:
+                            - digest
+                            - lastTransitionTime
+                            - name
+                            - preview
+                          type: object
+                        type: array
+                      stampedRef:
+                        description: StampedRef is a reference to the object that was created by the resource
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead of an entire object, this string should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2]. For example, if the object reference is to a container within a pod, this would take on a value like: "spec.containers{name}" (where "name" refers to the name of the container that triggered the event) or if no container name is specified "spec.containers[2]" (container with index 2 in this pod). This syntax is chosen only to have some well-defined way of referencing a part of an object. TODO: this design is not final and this field is subject to change in the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                      templateRef:
+                        description: TemplateRef is a reference to the template used to create the object in StampedRef
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead of an entire object, this string should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2]. For example, if the object reference is to a container within a pod, this would take on a value like: "spec.containers{name}" (where "name" refers to the name of the container that triggered the event) or if no container name is specified "spec.containers[2]" (container with index 2 in this pod). This syntax is chosen only to have some well-defined way of referencing a part of an object. TODO: this design is not final and this field is subject to change in the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                    required:
+                      - name
+                    type: object
+                  type: array
               type: object
           required:
             - metadata
@@ -1090,7 +1394,17 @@ spec:
     singular: runnable
   scope: Namespaced
   versions:
-    - name: v1alpha1
+    - additionalPrinterColumns:
+        - jsonPath: .status.conditions[?(@.type=='Ready')].status
+          name: Ready
+          type: string
+        - jsonPath: .status.conditions[?(@.type=='Ready')].reason
+          name: Reason
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha1
       schema:
         openAPIV3Schema:
           properties:
@@ -1268,6 +1582,9 @@ spec:
         - jsonPath: .status.conditions[?(@.type=='Ready')].reason
           name: Reason
           type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
       name: v1alpha1
       schema:
         openAPIV3Schema:
@@ -1590,6 +1907,102 @@ spec:
                   description: ObservedGeneration refers to the metadata.Generation of the spec that resulted in the current `status`.
                   format: int64
                   type: integer
+                resources:
+                  description: Resources contain references to the objects created by the Supply Chain and the templates used to create them. It also contains Inputs and Outputs that were passed between the templates as the Supply Chain was processed.
+                  items:
+                    properties:
+                      inputs:
+                        description: Inputs are references to resources that were used to template the object in StampedRef
+                        items:
+                          properties:
+                            name:
+                              description: Name is the name of the resource in the blueprint whose output the resource consumes as an input
+                              type: string
+                          required:
+                            - name
+                          type: object
+                        type: array
+                      name:
+                        description: Name is the name of the resource in the blueprint
+                        type: string
+                      outputs:
+                        description: Outputs are values from the object in StampedRef that can be consumed by other resources
+                        items:
+                          properties:
+                            digest:
+                              description: Digest is a sha256 of the full value of the output
+                              type: string
+                            lastTransitionTime:
+                              description: LastTransitionTime is a timestamp of the last time the value changed
+                              format: date-time
+                              type: string
+                            name:
+                              description: Name is the output type generated from the resource [url, revision, image or config]
+                              type: string
+                            preview:
+                              description: Preview is a preview of the value of the output
+                              type: string
+                          required:
+                            - digest
+                            - lastTransitionTime
+                            - name
+                            - preview
+                          type: object
+                        type: array
+                      stampedRef:
+                        description: StampedRef is a reference to the object that was created by the resource
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead of an entire object, this string should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2]. For example, if the object reference is to a container within a pod, this would take on a value like: "spec.containers{name}" (where "name" refers to the name of the container that triggered the event) or if no container name is specified "spec.containers[2]" (container with index 2 in this pod). This syntax is chosen only to have some well-defined way of referencing a part of an object. TODO: this design is not final and this field is subject to change in the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                      templateRef:
+                        description: TemplateRef is a reference to the template used to create the object in StampedRef
+                        properties:
+                          apiVersion:
+                            description: API version of the referent.
+                            type: string
+                          fieldPath:
+                            description: 'If referring to a piece of an object instead of an entire object, this string should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2]. For example, if the object reference is to a container within a pod, this would take on a value like: "spec.containers{name}" (where "name" refers to the name of the container that triggered the event) or if no container name is specified "spec.containers[2]" (container with index 2 in this pod). This syntax is chosen only to have some well-defined way of referencing a part of an object. TODO: this design is not final and this field is subject to change in the future.'
+                            type: string
+                          kind:
+                            description: 'Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            type: string
+                          namespace:
+                            description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                            type: string
+                          resourceVersion:
+                            description: 'Specific resourceVersion to which this reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency'
+                            type: string
+                          uid:
+                            description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
+                            type: string
+                        type: object
+                    required:
+                      - name
+                    type: object
+                  type: array
                 supplyChainRef:
                   description: SupplyChainRef is the Supply Chain resource that was used when this status was set.
                   properties:
@@ -1659,7 +2072,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:a43a4deb5b9c31482b107d5d75f764cf73a475840b6671f051175fd9920493c3
+          image: projectcartographer/cartographer@sha256:c51ca0d715e73cb6126404d529147f8c05e1bbf0d14124f18124762f3a84b6a1
           args:
             - -cert-dir=/cert
           securityContext:
