@@ -6,15 +6,6 @@ copyright:
 	$(ADDLICENSE) -f ./hack/copyright.txt .
 
 
-install:
-	./hack/bundle.sh
-	ytt \
-		--ignore-unknown-comments \
-		-f ./src/ootb-supply-chains \
-		--data-value registry.server=foo \
-		--data-value registry.repository=bah
-
-
 check:
 	hack/check/check-mdlint.sh
 	hack/check/check-yaml.sh
