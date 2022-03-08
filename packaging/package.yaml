@@ -41,8 +41,11 @@ spec:
       template:
         - ytt:
             ignoreUnknownComments: true
+            paths:
+              - 'config'
         - kbld:
             paths:
+              - '.imgpkg/images.yml'
               - '-'
       deploy:
         - kapp: {}
