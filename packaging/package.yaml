@@ -41,6 +41,8 @@ spec:
       template:
         - ytt:
             ignoreUnknownComments: true
-        - kbld: {}
+        - kbld:
+            paths:
+              - '-'
       deploy:
         - kapp: {}
