@@ -64,11 +64,11 @@ spec:
                     type: object
                   type: array
                 template:
-                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                 ytt:
-                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: string
               required:
                 - configPath
@@ -525,11 +525,11 @@ spec:
                     type: object
                   type: array
                 template:
-                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                 ytt:
-                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: string
               type: object
           required:
@@ -597,11 +597,11 @@ spec:
                     type: object
                   type: array
                 template:
-                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                 ytt:
-                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: string
               required:
                 - imagePath
@@ -658,7 +658,7 @@ spec:
                   description: "Outputs are a named list of jsonPaths that are used to gather results from the last successful object stamped by the template. E.g: \tmy-output: .status.results[?(@.name==\"IMAGE-DIGEST\")].value Note: outputs are only filled on the runnable when the templated object has a Succeeded condition with a Status of True E.g:     status.conditions[?(@.type==\"Succeeded\")].status == True a runnable creating an object without a Succeeded condition (like a Job or ConfigMap) will never display an output"
                   type: object
                 template:
-                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/'
+                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
               required:
@@ -729,14 +729,14 @@ spec:
                   description: 'RevisionPath is a path into the templated object''s data that contains a revision. The revision, along with the URL, represents the output of the Template. RevisionPath is specified in jsonpath format, eg: .status.artifact.revision'
                   type: string
                 template:
-                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                 urlPath:
                   description: 'URLPath is a path into the templated object''s data that contains a URL. The URL, along with the revision, represents the output of the Template. URLPath is specified in jsonpath format, eg: .status.artifact.url'
                   type: string
                 ytt:
-                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: string
               required:
                 - revisionPath
@@ -1152,11 +1152,11 @@ spec:
                     type: object
                   type: array
                 template:
-                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Template defines a resource template for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: object
                   x-kubernetes-preserve-unknown-fields: true
                 ytt:
-                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time.'
+                  description: 'Ytt defines a resource template written in `ytt` for a Kubernetes Resource or Custom Resource which is applied to the server each time the blueprint is applied. Templates support simple value interpolation using the $()$ marker format. For more information, see: https://cartographer.sh/docs/latest/templating/ You cannot define both Template and Ytt at the same time. You should not define the namespace for the resource - it will automatically be created in the owner namespace. If the namespace is specified and is not the owner namespace, the resource will fail to be created.'
                   type: string
               type: object
           required:
@@ -2120,6 +2120,9 @@ kind: Deployment
 metadata:
   name: cartographer-controller
   namespace: cartographer-system
+  labels:
+    app.kubernetes.io/name: cartographer-controller
+    app.kubernetes.io/version: v0.3.0-build.4
 spec:
   selector:
     matchLabels:
@@ -2140,7 +2143,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:20eada1387d953f89c0aacde61b9054ca2d04e6e1ae51a7e03dc599de9a653ab
+          image: projectcartographer/cartographer@sha256:28977695da35b9393d74e8c22df938439f69334d089153936ae5ca680c4f0c60
           args:
             - -cert-dir=/cert
           securityContext:
