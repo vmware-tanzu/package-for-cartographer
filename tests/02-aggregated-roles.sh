@@ -43,10 +43,13 @@ setup() {
 check_permissions() {
         local sa=app-viewer
 
-        _assert app-viewer get workload
-        _assert app-editor create workload
+        _assert app-viewer get workloads
+        _assert app-viewer get podintents
+        _assert app-editor create workloads
         _assert app-viewer-cluster-access get clusterdeliveries
+        _assert app-viewer-cluster-access get clusterpodconventions
         _assert app-operator-cluster-access create clusterdeliveries
+        _assert app-operator-cluster-access create clusterpodconventions
 }
 
 _assert() {

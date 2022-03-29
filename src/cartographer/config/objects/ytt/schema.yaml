@@ -12,11 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: vendir.k14s.io/v1alpha1
-directories:
-- contents:
-  - githubRelease:
-      url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/63386175
-    path: .
-  path: ./config/upstream
-kind: LockConfig
+#@data/values-schema
+---
+ca_cert_data: ""
+excluded_components:
+- ""

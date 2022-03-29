@@ -1,4 +1,4 @@
-# Contributing
+# Contributing <!-- omit in toc -->
 
 The Cartographer project team welcomes contributions from the community. If you
 wish to contribute code and you have not signed our contributor license
@@ -32,17 +32,29 @@ the following steps must be followed:
 
 ### 1. `vendir` update update 
 
-Update [`src/cartographer/vendir.yaml`](../src/cartographer/vendir.yaml) to
+Update [`./vendir.yaml`](./vendir.yaml) to
 point at the new release of Cartographer
 
 
 ```scala
-./src/
-└── cartographer
-    ├── upstream
-    │   └── cartographer.yaml
-    ├── vendir.lock.yml
-    └── vendir.yml            """ this file """
+.
+├── ...
+├── src
+│   └── cartographer
+│       └── config
+│           ├── ...
+│           └── upstream
+│               ├── cartographer
+│               │   └── cartographer.yaml                                                     """ vendir'ed file """
+│               └── cartographer-conventions
+│                   └── cartographer-conventions-v0.1.0-build.1.yaml                          """ vendir'ed file """
+├── tests
+│   ├── ...
+│   ├── 01-test-convention-setup
+│   │   └── cartographer-conventions-samples-convention-server-v0.1.0-build.1.yaml            """ vendir'ed file """
+│   ├── ...
+├── vendir.lock.yml
+└── vendir.yml            """ this file """
 ```
 
 In order to gather the latest updates from Cartographer, this repository makes
@@ -57,7 +69,7 @@ For instance, assuming a bump of Cartographer from `0.2.1` to `0.2.2`, we'd
 patch the `tag`:
 
 ```diff
-+++ b/src/cartographer/vendir.yml
++++ b/vendir.yml
 @@ -20,6 +20,6 @@ directories:
        - path: '.'
          githubRelease:
@@ -71,11 +83,11 @@ patch the `tag`:
 
 ### 2. `vendir sync`
 
-Run `vendir sync` from the `src/cartographer/vendir.yml`
+Run `vendir sync` from the `./vendir.yml`
 
 With `vendir.yml` pointing at the right place, `vendir sync` takes care of
 fetching the assets we want and then placing them in the right place
-(`./src/cartographer/upstream`).
+(`./upstream`).
 
 
 ### 3. Pull request

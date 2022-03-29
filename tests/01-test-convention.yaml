@@ -12,14 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: vendir.k14s.io/v1alpha1
+---
+apiVersion: conventions.carto.run/v1alpha1
+kind: PodIntent
+metadata:
+  name: test-convention
+spec:
+  template:
+    spec:
+      containers:
+      - name: workload
+        image: ubuntu
+
+---
+apiVersion: kapp.k14s.io/v1alpha1
 kind: Config
-directories:
-  - path: ./config/upstream
-    contents:
-      - path: '.'
-        githubRelease:
-          disableAutoChecksumValidation: true
-          tag: v0.3.0
-          assetNames: ["cartographer.yaml"]
-          slug: vmware-tanzu/cartographer
+minimumRequiredVersion: 0.29.0
+waitRules:
+- supportsObservedGeneration: true
+  conditionMatchers:
+  - type: Ready
+    status: "False"
+    failure: true
+  - type: Ready
+    status: "True"
+    success: true
+  resourceMatchers:
+  - apiVersionKindMatcher: {apiVersion: conventions.carto.run/v1alpha1, kind: PodIntent}
