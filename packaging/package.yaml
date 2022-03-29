@@ -27,12 +27,23 @@ metadata:
 spec:
   refName: #@ data.values.name
   version: #@ data.values.version
-  releaseNotes: #@ "https://github.com/vmware-tanzu/cartographer/releases/tag/" + data.values.version
+  releaseNotes: #@ "https://github.com/vmware-tanzu/package-for-cartographer/releases/tag/" + data.values.version
   releasedAt: #@ data.values.released_at
   valuesSchema:
     openAPIv3:
       title: #@ data.values.name + '.' + data.values.version + ' values schema'
-      properties: {}
+      properties:
+        ca_cert_data:
+          type: string
+          description: "Optional: PEM Encoded certificate data for image registries with private CA."
+          default: ""
+        excluded_components:
+          type: array
+          items:
+            type: string
+          default: []
+          description: "Optional: List of components to exclude from installation (e.g. [conventions])"
+
   template:
     spec:
       fetch:
