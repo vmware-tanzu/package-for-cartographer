@@ -19,6 +19,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clusterconfigtemplates.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -93,6 +95,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clusterdeliveries.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -436,6 +440,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clusterdeploymenttemplates.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -552,6 +558,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clusterimagetemplates.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -626,6 +634,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clusterruntemplates.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -684,6 +694,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clustersourcetemplates.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -762,6 +774,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clustersupplychains.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -1110,6 +1124,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: clustertemplates.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -1179,6 +1195,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: deliverables.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -1449,6 +1467,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: runnables.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -1624,6 +1644,8 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: workloads.carto.run
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   group: carto.run
   names:
@@ -2104,17 +2126,6 @@ kind: Namespace
 metadata:
   name: cartographer-system
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: private-registry-credentials
-  namespace: cartographer-system
-  annotations:
-    secretgen.carvel.dev/image-pull-secret: ""
-type: kubernetes.io/dockerconfigjson
-data:
-  .dockerconfigjson: e30K
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -2122,7 +2133,8 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.3.0
+    app.kubernetes.io/version: v0.3.1-build.1
+    app.kubernetes.io/component: cartographer
 spec:
   selector:
     matchLabels:
@@ -2134,8 +2146,6 @@ spec:
         app: cartographer-controller
     spec:
       serviceAccount: cartographer-controller
-      imagePullSecrets:
-        - name: private-registry-credentials
       volumes:
         - name: cert
           secret:
@@ -2143,7 +2153,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:d80b110d769a637b1d6fa40597256545917e6d2bfb692b3b9331b55ab2c86b13
+          image: projectcartographer/cartographer@sha256:e26b3073007e9f5e72be836d8517e4b25b835258b4b34b89abb54cae5c94acf4
           args:
             - -cert-dir=/cert
           securityContext:
@@ -2170,11 +2180,15 @@ kind: ServiceAccount
 metadata:
   name: cartographer-controller
   namespace: cartographer-system
+  labels:
+    app.kubernetes.io/component: cartographer
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: cartographer-cluster-admin
+  labels:
+    app.kubernetes.io/component: cartographer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -2188,6 +2202,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: cartographer-controller-admin
+  labels:
+    app.kubernetes.io/component: cartographer
 rules:
   - apiGroups:
       - carto.run
@@ -2218,6 +2234,7 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    app.kubernetes.io/component: cartographer
 rules:
   - apiGroups:
       - carto.run
@@ -2239,6 +2256,7 @@ metadata:
   name: cartographer-user-view
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
+    app.kubernetes.io/component: cartographer
 rules:
   - apiGroups:
       - carto.run
@@ -2253,171 +2271,197 @@ rules:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: deliveryvalidator
+  creationTimestamp: null
+  name: validating-webhook-configuration
   annotations:
     cert-manager.io/inject-ca-from: cartographer-system/cartographer-webhook
+  labels:
+    app.kubernetes.io/component: cartographer
 webhooks:
-  - name: delivery-validator.cartographer.com
-    rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
-          - carto.run
-        apiVersions:
-          - v1alpha1
-        resources:
-          - clusterdeliveries
-        scope: Cluster
-    clientConfig:
-      service:
-        name: cartographer-webhook
-        namespace: cartographer-system
-        path: /validate-carto-run-v1alpha1-clusterdelivery
-    sideEffects: None
-    admissionReviewVersions:
-      - v1
+  - admissionReviewVersions:
       - v1beta1
-  - name: deployment-template-validator.cartographer.com
-    rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
-          - carto.run
-        apiVersions:
-          - v1alpha1
-        resources:
-          - clusterdeploymenttemplates
-        scope: Cluster
-    clientConfig:
-      service:
-        name: cartographer-webhook
-        namespace: cartographer-system
-        path: /validate-carto-run-v1alpha1-clusterdeploymenttemplate
-    sideEffects: None
-    admissionReviewVersions:
       - v1
-      - v1beta1
----
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  name: clustersupplychainvalidator
-  annotations:
-    cert-manager.io/inject-ca-from: cartographer-system/cartographer-webhook
-webhooks:
-  - name: supply-chain-validator.cartographer.com
-    rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
-          - carto.run
-        apiVersions:
-          - v1alpha1
-        resources:
-          - clustersupplychains
-        scope: Cluster
-    clientConfig:
-      service:
-        name: cartographer-webhook
-        namespace: cartographer-system
-        path: /validate-carto-run-v1alpha1-clustersupplychain
-    sideEffects: None
-    admissionReviewVersions:
-      - v1
-      - v1beta1
-  - name: config-template-validator.cartographer.com
-    rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
-          - carto.run
-        apiVersions:
-          - v1alpha1
-        resources:
-          - clusterconfigtemplates
-        scope: Cluster
     clientConfig:
       service:
         name: cartographer-webhook
         namespace: cartographer-system
         path: /validate-carto-run-v1alpha1-clusterconfigtemplate
-    sideEffects: None
-    admissionReviewVersions:
-      - v1
-      - v1beta1
-  - name: image-template-validator.cartographer.com
+    failurePolicy: Fail
+    name: config-template-validator.cartographer.com
     rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
+      - apiGroups:
           - carto.run
         apiVersions:
           - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
         resources:
-          - clusterimagetemplates
+          - clusterconfigtemplates
         scope: Cluster
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+      - v1
+    clientConfig:
+      service:
+        name: cartographer-webhook
+        namespace: cartographer-system
+        path: /validate-carto-run-v1alpha1-clusterdelivery
+    failurePolicy: Fail
+    name: delivery-validator.cartographer.com
+    rules:
+      - apiGroups:
+          - carto.run
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clusterdeliveries
+        scope: Cluster
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+      - v1
+    clientConfig:
+      service:
+        name: cartographer-webhook
+        namespace: cartographer-system
+        path: /validate-carto-run-v1alpha1-clusterdeploymenttemplate
+    failurePolicy: Fail
+    name: deployment-template-validator.cartographer.com
+    rules:
+      - apiGroups:
+          - carto.run
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clusterdeploymenttemplates
+        scope: Cluster
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+      - v1
     clientConfig:
       service:
         name: cartographer-webhook
         namespace: cartographer-system
         path: /validate-carto-run-v1alpha1-clusterimagetemplate
-    sideEffects: None
-    admissionReviewVersions:
-      - v1
-      - v1beta1
-  - name: source-template-validator.cartographer.com
+    failurePolicy: Fail
+    name: image-template-validator.cartographer.com
     rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
+      - apiGroups:
           - carto.run
         apiVersions:
           - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
         resources:
-          - clustersourcetemplates
+          - clusterimagetemplates
         scope: Cluster
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+      - v1
+    clientConfig:
+      service:
+        name: cartographer-webhook
+        namespace: cartographer-system
+        path: /validate-carto-run-v1alpha1-clusterruntemplate
+    failurePolicy: Fail
+    name: run-template-validator.cartographer.com
+    rules:
+      - apiGroups:
+          - carto.run
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clusterruntemplates
+        scope: Cluster
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+      - v1
     clientConfig:
       service:
         name: cartographer-webhook
         namespace: cartographer-system
         path: /validate-carto-run-v1alpha1-clustersourcetemplate
-    sideEffects: None
-    admissionReviewVersions:
-      - v1
-      - v1beta1
-  - name: template-validator.cartographer.com
+    failurePolicy: Fail
+    name: source-template-validator.cartographer.com
     rules:
-      - operations:
-          - CREATE
-          - UPDATE
-        apiGroups:
+      - apiGroups:
           - carto.run
         apiVersions:
           - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
         resources:
-          - clustertemplates
+          - clustersourcetemplates
         scope: Cluster
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+      - v1
+    clientConfig:
+      service:
+        name: cartographer-webhook
+        namespace: cartographer-system
+        path: /validate-carto-run-v1alpha1-clustersupplychain
+    failurePolicy: Fail
+    name: supply-chain-validator.cartographer.com
+    rules:
+      - apiGroups:
+          - carto.run
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clustersupplychains
+        scope: Cluster
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+      - v1
     clientConfig:
       service:
         name: cartographer-webhook
         namespace: cartographer-system
         path: /validate-carto-run-v1alpha1-clustertemplate
+    failurePolicy: Fail
+    name: template-validator.cartographer.com
+    rules:
+      - apiGroups:
+          - carto.run
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clustertemplates
+        scope: Cluster
     sideEffects: None
-    admissionReviewVersions:
-      - v1
-      - v1beta1
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: cartographer-webhook
   namespace: cartographer-system
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   commonName: cartographer-webhook.cartographer-system.svc
   dnsNames:
@@ -2433,6 +2477,8 @@ kind: Issuer
 metadata:
   name: selfsigned-issuer
   namespace: cartographer-system
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   selfSigned: {}
 ---
@@ -2441,6 +2487,8 @@ kind: Service
 metadata:
   name: cartographer-webhook
   namespace: cartographer-system
+  labels:
+    app.kubernetes.io/component: cartographer
 spec:
   ports:
     - port: 443
@@ -2453,6 +2501,8 @@ apiVersion: v1
 metadata:
   name: cartographer-webhook
   namespace: cartographer-system
+  labels:
+    app.kubernetes.io/component: cartographer
 type: Opaque
 
 ---
