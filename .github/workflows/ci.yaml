@@ -16,6 +16,7 @@ name: ci
 
 on:
   push:
+  pull_request: {}
 
 jobs:
   test:
@@ -36,17 +37,9 @@ jobs:
           ./hack/ci/install-binaries.sh grype imgpkg kbld ytt kapp tanzu whocan
 
 
-      - name: Start cluster and registry, then install dependencies
+      - name: Start cluster and registry, then install products and dependencies
         run: |-
-          ./hack/cluster.sh start apply-dependencies
-
-
-      - name: Create and apply Package objects to the cluster
-        run: |-
-          bundle=$(./hack/ci/ip.py):5000/bundle
-
-          BUNDLE=$bundle ./hack/bundle.sh
-          kubectl apply -f ./release
+          ./hack/cluster.sh start apply-dependencies apply-cartographer
 
 
       - name: Check all YAML and README Markdown
@@ -58,14 +51,6 @@ jobs:
         continue-on-error: true
         run: |-
           ./hack/scan.sh
-
-
-      - name: Install Package
-        run: |-
-          tanzu package install \
-            --package-name cartographer.tanzu.vmware.com \
-            --version 0.0.0 \
-            cartographer
 
 
       - name: Run tests
