@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#@ load("@ytt:data", "data")
-
-#@data/values
+#@data/values-schema
 ---
-name: cartographer.tanzu.vmware.com
-version:
-image:
-released_at:
+name: ""
+displayName: ""
+short_description: ""
+long_description: ""
+#@schema/type any=True
+properties: null
+version: ""
+image: ""
+released_at: ""

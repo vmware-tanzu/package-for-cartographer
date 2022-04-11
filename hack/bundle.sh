@@ -25,12 +25,21 @@ readonly RELEASE_DIR=${RELEASE_DIR:-$root/release}
 readonly RELEASE_DATE=${RELEASE_DATE:-$(TZ=UTC date +"%Y-%m-%dT%H:%M:%SZ")}
 
 main() {
+        test $# -eq 0 && {
+                echo "usage: $0 <product dir>"
+                echo "example: $0 ./src/cartographer"
+                echo "aborting."
+                exit 1
+        }
+
         cd $root
 
+        local product_dir=$(realpath $1)
+
         show_vars
-        create_imgpkg_bundle
-        create_carvel_packaging_objects
-        populate_release_dir
+        create_imgpkg_bundle $product_dir
+        create_carvel_packaging_objects $product_dir
+        populate_release_dir $product_dir
 }
 
 show_vars() {
@@ -44,11 +53,13 @@ show_vars() {
 }
 
 create_imgpkg_bundle() {
+        local dir=$1
+
         mkdir -p $SCRATCH/bundle/{.imgpkg,config}
 
-        cp -r ./src/cartographer/config/{objects,overlays,upstream} $SCRATCH/bundle/config
+        cp -r $dir/config/{objects,overlays,upstream} $SCRATCH/bundle/config
         kbld \
-                -f ./src/cartographer/config/upstream \
+                -f $dir/config/upstream \
                 --imgpkg-lock-output $SCRATCH/bundle/.imgpkg/images.yml \
                 >/dev/null
 
@@ -67,6 +78,8 @@ create_imgpkg_bundle() {
 }
 
 create_carvel_packaging_objects() {
+        local dir=$1
+
         mkdir -p $SCRATCH/package
 
         local image
@@ -74,8 +87,9 @@ create_carvel_packaging_objects() {
 
         for package_fpath in ./packaging/package*.yaml; do
                 ytt --ignore-unknown-comments \
-                        -f ./packaging/values.yaml \
+                        -f ./packaging/schema.yaml \
                         -f $package_fpath \
+                        -f $dir/package-values.yaml \
                         --data-value image=$image \
                         --data-value version=$RELEASE_VERSION \
                         --data-value released_at=$RELEASE_DATE > \
@@ -85,11 +99,14 @@ create_carvel_packaging_objects() {
 }
 
 populate_release_dir() {
-        mkdir -p $RELEASE_DIR
-        cp -r $SCRATCH/package/* $RELEASE_DIR
-        cp -r $SCRATCH/bundle.tar $RELEASE_DIR
+        local dir=$1
+        local release_dir=$RELEASE_DIR/$(basename $dir)
 
-        ls $RELEASE_DIR
+        mkdir -p $release_dir
+        cp -r $SCRATCH/package/* $release_dir
+        cp -r $SCRATCH/bundle.tar $release_dir
+
+        tree -a $RELEASE_DIR
 }
 
 _image_from_lockfile() {
