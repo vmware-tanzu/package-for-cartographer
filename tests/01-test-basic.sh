@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -21,29 +20,29 @@ set -o pipefail
 readonly root=$(cd $(dirname $0)/.. && pwd)
 
 main() {
-        cd $root/tests
+	cd $root/tests
 
-        run_test
+	run_test
 }
 
 run_test() {
-        local name=test-basic
+	local name=test-basic
 
-        kapp deploy --yes -a $name -f ./01-$name.yaml
-        trap "kapp delete -a $name --yes" EXIT
+	kapp deploy --yes -a $name -f ./01-$name.yaml
+	trap "kapp delete -a $name --yes" EXIT
 
-        for sleep_duration in {10..1}; do
-                echo "sleeping ${sleep_duration}s"
-                sleep $sleep_duration
+	for sleep_duration in {10..1}; do
+		echo "sleeping ${sleep_duration}s"
+		sleep $sleep_duration
 
-                kubectl get configmap workload-$name && {
-                        echo "succeeded!"
-                        return 0
-                }
-        done
+		kubectl get configmap workload-$name && {
+			echo "succeeded!"
+			return 0
+		}
+	done
 
-        echo "failed :("
-        exit 1
+	echo "failed :("
+	exit 1
 }
 
 main "$@"
