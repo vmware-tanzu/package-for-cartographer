@@ -42,7 +42,9 @@ directories:
   - path: ./src/cartographer-catalog/config/upstream/cartographer-catalog
     contents:
       - path: '.'
+        legalPaths: ['.inexistent']
         includePaths:
+          - 'README.md'
           - 'src/**'
         git:
           url: https://github.com/cirocosta/ootb-tce
