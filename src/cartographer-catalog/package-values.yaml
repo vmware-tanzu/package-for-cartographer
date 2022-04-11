@@ -1,0 +1,74 @@
+# Copyright 2022 VMware
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#@data/values
+---
+name: cartographer-catalog.tanzu.vmware.com
+version: ""
+image: ""
+released_at: ""
+
+displayName: Cartographer Catalog
+short_description: |-
+  Reusable Cartographer blueprints
+long_description: |-
+  Reusable Cartographer blueprints
+properties:
+  cluster_builder:
+    type: string
+    description: >
+      Name of the Kpack ClusterBuilder to use by default on image objects
+      managed by the supply chain.
+    default: default
+    examples:
+      - default
+
+  service_account:
+    type: string
+    description: >
+      Name of the service account in the namespace where the Workload is
+      submitted to utilize for providing registry credentials to Kpack as well
+      as deploying the application.
+    default: default
+    examples:
+      - default
+
+  git_implementation:
+    type: string
+    description: >
+      Name of the git client library to use by default in GitRepository
+      objects. Valid options are go-git or libgit2.
+    default: go-git
+    examples:
+    - go-git
+
+  registry:
+    type: object
+    properties:
+      server:
+        type: string
+        description: >
+          Name of the registry server where application images should be pushed
+          to (required).
+        examples:
+          - gcr.io
+
+      repository:
+        type: string
+        description: >
+          Name of the repository in the image registry server where the
+          application images from the workloads should be pushed to
+          (required).
+        examples:
+          - web-team
