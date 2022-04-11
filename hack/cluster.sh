@@ -20,6 +20,9 @@ readonly ROOT=$(cd $(dirname $0)/.. && pwd)
 
 readonly CERT_MANAGER_VERSION=1.7.1
 readonly KAPP_CONTROLLER_VERSION=0.32.0
+readonly KPACK_VERSION=0.5.2
+readonly KNATIVE_SERVING_VERSION=1.3.0
+readonly SOURCE_CONTROLLER_VERSION=0.22.4
 
 main() {
         cd $ROOT/hack
@@ -37,10 +40,15 @@ main() {
                 apply-dependencies)
                         install_cert_manager
                         install_kapp_controller
+
+                        install_knative_serving
+                        install_kpack
+                        install_source_controller
                         ;;
 
                 apply-cartographer)
                         install_cartographer
+                        install_cartographer_catalog
                         ;;
 
                 *)
@@ -111,11 +119,34 @@ setup_rbac() {
 }
 
 install_cartographer() {
-        kubectl create clusterrolebinding default-admin \
-                --clusterrole=cluster-admin \
-                --serviceaccount=default:default || true
-        BUNDLE=$(local_ip_addr):5000/bundle $ROOT/hack/bundle.sh
-        kapp deploy -a cartographer -f $ROOT/release
+        BUNDLE=$(local_ip_addr):5000/bundle $ROOT/hack/bundle.sh $ROOT/src/cartographer
+        kubectl apply -f $ROOT/release/cartographer
+
+        tanzu package install \
+                --package-name cartographer.tanzu.vmware.com \
+                --version 0.0.0 \
+                cartographer
+}
+
+install_cartographer_catalog() {
+        BUNDLE=$(local_ip_addr):5000/bundle $ROOT/hack/bundle.sh $ROOT/src/cartographer-catalog
+        kubectl apply -f $ROOT/release/cartographer-catalog
+
+        local values_file=$(mktemp)
+        local local_registry
+        local_registry=$(local_ip_addr):5000
+
+        echo "---
+registry:
+  server: $local_registry
+  repository: test
+        " > $values_file
+
+        tanzu package install \
+                --package-name cartographer-catalog.tanzu.vmware.com \
+                --version 0.0.0 \
+                --values-file $values_file \
+                cartographer-catalog
 }
 
 install_cert_manager() {
@@ -130,6 +161,46 @@ install_kapp_controller() {
                 -f "./overlays/strip-resources.yaml" \
                 -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v$KAPP_CONTROLLER_VERSION/release.yml |
                 kapp deploy --yes -a kapp-controller -f-
+}
+
+
+install_knative_serving() {
+        ytt --ignore-unknown-comments \
+                -f https://github.com/knative/serving/releases/download/knative-v$KNATIVE_SERVING_VERSION/serving-core.yaml \
+                -f https://github.com/knative/serving/releases/download/knative-v$KNATIVE_SERVING_VERSION/serving-crds.yaml \
+                -f "./overlays/strip-resources.yaml" |
+                kapp deploy --yes -a knative-serving -f-
+}
+
+install_kpack() {
+        local local_registry
+        local_registry=$(local_ip_addr):5000
+
+        kapp deploy --yes -a kpack \
+                -f <(
+                        ytt \
+                                --ignore-unknown-comments \
+                                -f https://github.com/pivotal/kpack/releases/download/v$KPACK_VERSION/release-$KPACK_VERSION.yaml \
+                                -f ./overlays/strip-resources.yaml \
+                                -f ./kpack --data-value builder_image=$local_registry/builder
+                )
+
+        echo "waiting clusterbuilder to be ready..."
+        kubectl wait --for=condition=ready clusterbuilder default --timeout=2m
+}
+
+install_source_controller() {
+        kubectl create namespace gitops-toolkit || true
+
+        kubectl create clusterrolebinding gitops-toolkit-admin \
+                --clusterrole=cluster-admin \
+                --serviceaccount=gitops-toolkit:default || true
+
+        ytt --ignore-unknown-comments \
+                -f "./overlays/strip-resources.yaml" \
+                -f https://github.com/fluxcd/source-controller/releases/download/v$SOURCE_CONTROLLER_VERSION/source-controller.crds.yaml \
+                -f https://github.com/fluxcd/source-controller/releases/download/v$SOURCE_CONTROLLER_VERSION/source-controller.deployment.yaml |
+                kapp deploy --yes -a gitops-toolkit --into-ns gitops-toolkit -f-
 }
 
 local_ip_addr() {
