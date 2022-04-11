@@ -29,4 +29,10 @@ directories:
       url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/63805206
     path: .
   path: ./tests/01-test-convention-setup
+- contents:
+  - git:
+      commitTitle: 'hack: bump dependencies...'
+      sha: 3940a34b6806b1330611ea4603f50edfb4304c01
+    path: .
+  path: ./src/cartographer-catalog/config/upstream/cartographer-catalog
 kind: LockConfig

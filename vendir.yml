@@ -39,3 +39,11 @@ directories:
           tag: v0.1.0-build.3
           assetNames: ["cartographer-conventions-samples-convention-server-v*.yaml"]
           slug: vmware-tanzu/cartographer-conventions
+  - path: ./src/cartographer-catalog/config/upstream/cartographer-catalog
+    contents:
+      - path: '.'
+        includePaths:
+          - 'src/**'
+        git:
+          url: https://github.com/cirocosta/ootb-tce
+          ref: origin/cartographer-catalog-preparations
