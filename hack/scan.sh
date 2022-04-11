@@ -23,11 +23,15 @@ readonly scratch=$(mktemp -d)
 
 main() {
         cd $root
-        scan_bundle_images
+
+        for package_file in $(find ./release -name "package.yaml"); do
+                scan_bundle_images $package_file
+        done
 }
 
 scan_bundle_images() {
-        local images=$(find_images_in_package ./release/package.yaml)
+        local package_file=$1
+        local images=$(find_images_in_package $package_file)
 
         for image in $images; do
                 scan_image $image
