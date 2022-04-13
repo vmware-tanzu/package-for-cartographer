@@ -18,25 +18,22 @@ set -o nounset
 
 readonly root=$(cd $(dirname $0)/.. && pwd)
 
+readonly NAME=${NAME:?name must be set}
+readonly PACKAGE_NAME=${PACKAGE_NAME:?package name must be set}
 readonly BUNDLE=${BUNDLE:?imgpkg bundle image name must be provided}
-readonly RELEASE_VERSION=${RELEASE_VERSION:-0.0.0}
+readonly DIR=${DIR:?directory to package must be provided}
+
+readonly RELEASE_VERSION=${RELEASE_VERSION:?release version must be set}
 readonly SCRATCH=${SCRATCH:-$(mktemp -d)}
 readonly RELEASE_DIR=${RELEASE_DIR:-$root/release}
 readonly RELEASE_DATE=${RELEASE_DATE:-$(TZ=UTC date +"%Y-%m-%dT%H:%M:%SZ")}
 
 main() {
-        test $# -eq 0 && {
-                echo "usage: $0 <product dir>"
-                echo "example: $0 ./src/cartographer"
-                echo "aborting."
-                exit 1
-        }
-
         cd $root
-
-        local product_dir=$(realpath $1)
-
         show_vars
+
+        local product_dir=$(realpath $DIR)
+
         create_imgpkg_bundle $product_dir
         create_carvel_packaging_objects $product_dir
         populate_release_dir $product_dir
@@ -45,6 +42,10 @@ main() {
 show_vars() {
         echo "
         BUNDLE                  $BUNDLE
+        DIR                     $DIR
+        NAME                    $NAME
+        PACKAGE_NAME            $PACKAGE_NAME
+
         RELEASE_DATE            $RELEASE_DATE
         RELEASE_DIR             $RELEASE_DIR
         RELEASE_VERSION         $RELEASE_VERSION
@@ -57,6 +58,7 @@ create_imgpkg_bundle() {
 
         mkdir -p $SCRATCH/bundle/{.imgpkg,config}
 
+        cp -r $dir/README.md $SCRATCH/README.md
         cp -r $dir/config/{objects,overlays,upstream} $SCRATCH/bundle/config
         kbld \
                 -f $dir/config/upstream \
@@ -79,32 +81,44 @@ create_imgpkg_bundle() {
 
 create_carvel_packaging_objects() {
         local dir=$1
+        local image
 
+        image=$(_image_from_lockfile $SCRATCH/bundle.lock.yaml)
         mkdir -p $SCRATCH/package
 
-        local image
-        image=$(_image_from_lockfile $SCRATCH/bundle.lock.yaml)
-
-        for package_fpath in ./packaging/package*.yaml; do
+        for package_fpath in ./packaging/{package,metadata}.yaml; do
                 ytt --ignore-unknown-comments \
                         -f ./packaging/schema.yaml \
                         -f $package_fpath \
                         -f $dir/package-values.yaml \
+                        --data-value name=$PACKAGE_NAME \
                         --data-value image=$image \
                         --data-value version=$RELEASE_VERSION \
                         --data-value released_at=$RELEASE_DATE > \
-                        $SCRATCH/package/"$(basename $package_fpath)"
+                        $SCRATCH/"$(basename $package_fpath)"
         done
-
 }
 
+# ./release/
+# ├── cartographer
+# │   ├── cartographer-bundle.tar
+# │   ├── metadata.yaml
+# │   └── package.yaml
+# ...
+# └── cartographer-tce
+#     ├── cartographer-tce-bundle.tar
+#     ├── metadata.yaml
+#     └── package.yaml
+#
 populate_release_dir() {
         local dir=$1
-        local release_dir=$RELEASE_DIR/$(basename $dir)
+        local release_dir=$RELEASE_DIR/$NAME
 
         mkdir -p $release_dir
-        cp -r $SCRATCH/package/* $release_dir
-        cp -r $SCRATCH/bundle.tar $release_dir
+
+        cp -r $SCRATCH/README.md $release_dir/README.md
+        cp -r $SCRATCH/bundle.tar $release_dir/bundle.tar
+        cp -r $SCRATCH/{package,metadata}.yaml $release_dir
 
         tree -a $RELEASE_DIR
 }

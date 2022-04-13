@@ -2,7 +2,7 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - githubRelease:
-      url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/63386175
+      url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/64381985
     path: .
   path: ./src/cartographer/config/upstream/cartographer
 - contents:
@@ -17,8 +17,8 @@ directories:
   path: ./tests/01-test-convention-setup
 - contents:
   - git:
-      commitTitle: 'src: bypass any use of conventions...'
-      sha: e2b0403e3be8ff15c9695222fd18b7a75a145c14
+      commitTitle: 'src: rename role -> clusterrole...'
+      sha: 8931d79c9ef611120a652ac0a4e0b5796248b810
     path: .
   path: ./src/cartographer-catalog/config/upstream/cartographer-catalog
 kind: LockConfig

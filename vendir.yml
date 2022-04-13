@@ -20,7 +20,7 @@ directories:
       - path: '.'
         githubRelease:
           disableAutoChecksumValidation: true
-          tag: v0.3.0
+          tag: v0.4.0-build.1
           assetNames: ["cartographer.yaml"]
           slug: vmware-tanzu/cartographer
   - path: ./src/cartographer/config/upstream/cartographer-conventions
@@ -43,9 +43,8 @@ directories:
     contents:
       - path: '.'
         legalPaths: ['.inexistent']
-        includePaths:
-          - 'README.md'
-          - 'src/**'
+        newRootPath: src
+        includePaths: ['src/**']
         git:
-          url: https://github.com/cirocosta/ootb-tce
-          ref: origin/cartographer-catalog-preparations
+          url: https://github.com/vmware-tanzu/cartographer-catalog
+          ref: origin/main

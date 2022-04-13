@@ -29,15 +29,16 @@ main() {
         }
 
         cd $root
+        tgz_contents
         craft_release_body
-        push $1
+        # push $1
 }
 
 craft_release_body() {
         local checksums_file=$(mktemp)
 
         pushd release
-        sha256sum * >$checksums_file
+        sha256sum *.tgz >$checksums_file
         popd
 
         cat <<-EOF >$release_body
@@ -48,6 +49,14 @@ craft_release_body() {
 	EOF
 }
 
+tgz_contents() {
+        for dir in ./release/*/; do
+                pushd $dir
+                tar czvf $root/release/$(basename $dir).tgz *
+                popd
+        done
+}
+
 push() {
         local version=$1
 
@@ -56,11 +65,7 @@ push() {
                 --prerelease \
                 --title $version \
                 --notes-file $release_body \
-                ./release/bundle.tar \
-                ./release/package-install.yaml \
-                ./release/package-metadata.yaml \
-                ./release/package.yaml \
-                ./README.md
+                ./release/*.tgz
 }
 
 main "$@"
