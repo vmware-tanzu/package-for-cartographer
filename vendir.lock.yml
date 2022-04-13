@@ -19,6 +19,8 @@ directories:
   - git:
       commitTitle: 'src: rename role -> clusterrole...'
       sha: 8931d79c9ef611120a652ac0a4e0b5796248b810
+      tags:
+      - v0.3.0
     path: .
   path: ./src/cartographer-catalog/config/upstream/cartographer-catalog
 kind: LockConfig

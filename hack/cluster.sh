@@ -25,7 +25,7 @@ readonly KNATIVE_SERVING_VERSION=1.3.0
 readonly SOURCE_CONTROLLER_VERSION=0.22.4
 
 main() {
-        cd $ROOT/hack
+        cd $ROOT
 
         test $# -eq 0 && abort_with_help
 
@@ -115,12 +115,12 @@ EOF
 }
 
 setup_rbac() {
-        kapp deploy --yes -a rbac -f ./rbac
+        kapp deploy --yes -a rbac -f ./hack/rbac
 }
 
 install_cartographer() {
-        BUNDLE=$(local_ip_addr):5000/bundle $ROOT/hack/bundle.sh $ROOT/src/cartographer
-        kubectl apply -f $ROOT/release/cartographer
+        BUNDLE=$(local_ip_addr):5000/bundle make bundle-cartographer
+        kubectl apply -f ./release/cartographer
 
         tanzu package install \
                 --package-name cartographer.tanzu.vmware.com \
@@ -129,8 +129,8 @@ install_cartographer() {
 }
 
 install_cartographer_catalog() {
-        BUNDLE=$(local_ip_addr):5000/bundle $ROOT/hack/bundle.sh $ROOT/src/cartographer-catalog
-        kubectl apply -f $ROOT/release/cartographer-catalog
+        BUNDLE=$(local_ip_addr):5000/bundle make bundle-cartographer-catalog
+        kubectl apply -f ./release/cartographer-catalog
 
         local values_file=$(mktemp)
         local local_registry
@@ -151,14 +151,14 @@ registry:
 
 install_cert_manager() {
         ytt --ignore-unknown-comments \
-                -f "./overlays/strip-resources.yaml" \
+                -f "./hack/overlays/strip-resources.yaml" \
                 -f https://github.com/jetstack/cert-manager/releases/download/v$CERT_MANAGER_VERSION/cert-manager.yaml |
                 kapp deploy --yes -a cert-manager -f-
 }
 
 install_kapp_controller() {
         ytt --ignore-unknown-comments \
-                -f "./overlays/strip-resources.yaml" \
+                -f "./hack/overlays/strip-resources.yaml" \
                 -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v$KAPP_CONTROLLER_VERSION/release.yml |
                 kapp deploy --yes -a kapp-controller -f-
 }
@@ -168,7 +168,7 @@ install_knative_serving() {
         ytt --ignore-unknown-comments \
                 -f https://github.com/knative/serving/releases/download/knative-v$KNATIVE_SERVING_VERSION/serving-core.yaml \
                 -f https://github.com/knative/serving/releases/download/knative-v$KNATIVE_SERVING_VERSION/serving-crds.yaml \
-                -f "./overlays/strip-resources.yaml" |
+                -f "./hack/overlays/strip-resources.yaml" |
                 kapp deploy --yes -a knative-serving -f-
 }
 
@@ -181,8 +181,8 @@ install_kpack() {
                         ytt \
                                 --ignore-unknown-comments \
                                 -f https://github.com/pivotal/kpack/releases/download/v$KPACK_VERSION/release-$KPACK_VERSION.yaml \
-                                -f ./overlays/strip-resources.yaml \
-                                -f ./kpack --data-value builder_image=$local_registry/builder
+                                -f ./hack/overlays/strip-resources.yaml \
+                                -f ./hack/kpack --data-value builder_image=$local_registry/builder
                 )
 
         echo "waiting clusterbuilder to be ready..."
@@ -197,7 +197,7 @@ install_source_controller() {
                 --serviceaccount=gitops-toolkit:default || true
 
         ytt --ignore-unknown-comments \
-                -f "./overlays/strip-resources.yaml" \
+                -f "./hack/overlays/strip-resources.yaml" \
                 -f https://github.com/fluxcd/source-controller/releases/download/v$SOURCE_CONTROLLER_VERSION/source-controller.crds.yaml \
                 -f https://github.com/fluxcd/source-controller/releases/download/v$SOURCE_CONTROLLER_VERSION/source-controller.deployment.yaml |
                 kapp deploy --yes -a gitops-toolkit --into-ns gitops-toolkit -f-

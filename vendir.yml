@@ -47,4 +47,4 @@ directories:
         includePaths: ['src/**']
         git:
           url: https://github.com/vmware-tanzu/cartographer-catalog
-          ref: origin/main
+          ref: v0.3.0
