@@ -20,7 +20,7 @@ directories:
       - path: '.'
         githubRelease:
           disableAutoChecksumValidation: true
-          tag: v0.3.0
+          tag: v0.4.0-build.1
           assetNames: ["cartographer.yaml"]
           slug: vmware-tanzu/cartographer
   - path: ./src/cartographer/config/upstream/cartographer-conventions
