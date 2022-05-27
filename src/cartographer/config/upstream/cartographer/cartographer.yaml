@@ -50,6 +50,16 @@ spec:
                 configPath:
                   description: 'ConfigPath is a path into the templated object''s data that contains valid yaml. This is typically the information that will configure the components of the deployable image. ConfigPath is specified in jsonpath format, eg: .data'
                   type: string
+                healthRule:
+                  description: HealthRule specifies rubric for determining the health of a resource stamped by this template
+                  properties:
+                    alwaysHealthy:
+                      description: AlwaysHealthy being set indicates the resource should always be considered healthy
+                      type: object
+                    singleConditionType:
+                      description: SingleConditionType names a single condition which, when True indicates the resource is healthy. When False it is unhealthy. Otherwise, healthiness is Unknown.
+                      type: string
+                  type: object
                 params:
                   description: 'Additional parameters. See: https://cartographer.sh/docs/latest/architecture/#parameter-hierarchy'
                   items:
@@ -468,6 +478,16 @@ spec:
             spec:
               description: 'Spec describes the deployment template. More info: https://cartographer.sh/docs/latest/reference/template/#clusterdeploymenttemplate'
               properties:
+                healthRule:
+                  description: HealthRule specifies rubric for determining the health of a resource stamped by this template
+                  properties:
+                    alwaysHealthy:
+                      description: AlwaysHealthy being set indicates the resource should always be considered healthy
+                      type: object
+                    singleConditionType:
+                      description: SingleConditionType names a single condition which, when True indicates the resource is healthy. When False it is unhealthy. Otherwise, healthiness is Unknown.
+                      type: string
+                  type: object
                 observedCompletion:
                   description: ObservedCompletion describe the criteria for determining that the templated object completed configuration of environment. These criteria assert completion when metadata.Generation and status.ObservedGeneration match, AND success or failure criteria match. Cannot specify both ObservedMatches and ObservedCompletion.
                   properties:
@@ -586,6 +606,16 @@ spec:
             spec:
               description: 'Spec describes the image template. More info: https://cartographer.sh/docs/latest/reference/template/#clusterimagetemplate'
               properties:
+                healthRule:
+                  description: HealthRule specifies rubric for determining the health of a resource stamped by this template
+                  properties:
+                    alwaysHealthy:
+                      description: AlwaysHealthy being set indicates the resource should always be considered healthy
+                      type: object
+                    singleConditionType:
+                      description: SingleConditionType names a single condition which, when True indicates the resource is healthy. When False it is unhealthy. Otherwise, healthiness is Unknown.
+                      type: string
+                  type: object
                 imagePath:
                   description: 'ImagePath is a path into the templated object''s data that contains a valid image digest. This might be a URL or in some cases just a repository path and digest. The final spec for this field may change as we implement RFC-0016 https://github.com/vmware-tanzu/cartographer/blob/main/rfc/rfc-0016-validate-template-outputs.md ImagePath is specified in jsonpath format, eg: .status.artifact.image_digest'
                   type: string
@@ -722,6 +752,16 @@ spec:
             spec:
               description: 'Spec describes the source template. More info: https://cartographer.sh/docs/latest/reference/template/#clustersourcetemplate'
               properties:
+                healthRule:
+                  description: HealthRule specifies rubric for determining the health of a resource stamped by this template
+                  properties:
+                    alwaysHealthy:
+                      description: AlwaysHealthy being set indicates the resource should always be considered healthy
+                      type: object
+                    singleConditionType:
+                      description: SingleConditionType names a single condition which, when True indicates the resource is healthy. When False it is unhealthy. Otherwise, healthiness is Unknown.
+                      type: string
+                  type: object
                 params:
                   description: 'Additional parameters. See: https://cartographer.sh/docs/latest/architecture/#parameter-hierarchy'
                   items:
@@ -1152,6 +1192,16 @@ spec:
             spec:
               description: 'Spec describes the template. More info: https://cartographer.sh/docs/latest/reference/template/#clustertemplate'
               properties:
+                healthRule:
+                  description: HealthRule specifies rubric for determining the health of a resource stamped by this template
+                  properties:
+                    alwaysHealthy:
+                      description: AlwaysHealthy being set indicates the resource should always be considered healthy
+                      type: object
+                    singleConditionType:
+                      description: SingleConditionType names a single condition which, when True indicates the resource is healthy. When False it is unhealthy. Otherwise, healthiness is Unknown.
+                      type: string
+                  type: object
                 params:
                   description: 'Additional parameters. See: https://cartographer.sh/docs/latest/architecture/#parameter-hierarchy'
                   items:
@@ -2221,7 +2271,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.4.0-build.2
+    app.kubernetes.io/version: v0.4.0-build.3
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2241,7 +2291,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:12f24724446953da077e6f175dbf9fc0e63961bd90c22fcedd5000e755212b6d
+          image: projectcartographer/cartographer@sha256:f63f3cc0e7ba217d10904286ffcb0c2631cc3ab41fe18074f5ce738af25bf604
           args:
             - -cert-dir=/cert
           securityContext:
