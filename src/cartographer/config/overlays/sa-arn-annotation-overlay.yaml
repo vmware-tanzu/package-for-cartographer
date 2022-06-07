@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#@data/values-schema
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#@ if/end hasattr(data.values, "aws_iam_role_arn") and data.values.aws_iam_role_arn != "":
+#@overlay/match by=overlay.subset({"apiVersion":"v1","kind":"ServiceAccount","metadata":{"namespace":"cartographer-system", "name":"cartographer-conventions-controller-manager"}})
 ---
-ca_cert_data: ""
-excluded_components:
-- ""
-aws_iam_role_arn: ""
+metadata:
+  #@overlay/match missing_ok=True
+  annotations:
+    eks.amazonaws.com/role-arn: #@ data.values.aws_iam_role_arn
