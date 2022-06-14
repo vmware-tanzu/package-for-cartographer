@@ -6619,8 +6619,8 @@ metadata:
     kbld.k14s.io/images: |
       - origins:
         - preresolved:
-            url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:95169a016e619b29711c0e675e6a702cda94c150acb1a29c24cbee5270072785
-        url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:95169a016e619b29711c0e675e6a702cda94c150acb1a29c24cbee5270072785
+            url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:faed8b03a4774f7f8b54029bbb0ab2f02288678788b63474d48c3d633466a638
+        url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:faed8b03a4774f7f8b54029bbb0ab2f02288678788b63474d48c3d633466a638
   labels:
     app.kubernetes.io/component: conventions
     control-plane: controller-manager
@@ -6646,7 +6646,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:95169a016e619b29711c0e675e6a702cda94c150acb1a29c24cbee5270072785
+        image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:faed8b03a4774f7f8b54029bbb0ab2f02288678788b63474d48c3d633466a638
         livenessProbe:
           httpGet:
             path: /healthz
