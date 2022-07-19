@@ -1,0 +1,69 @@
+# Copyright 2022 VMware
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: ci
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron:  '30 1,12 * * *'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+
+      - name: Fetch latest cartographer version
+        uses: actions/github-script@v6
+        id: cartographer-version
+        with:
+          script: |
+            latestRelease = await github.rest.repos.getLatestRelease({
+              "owner": "vmware-tanzu",
+              "repo": "cartographer"
+            });
+
+            return latestRelease.data.tag_name
+          result-encoding: string
+
+      - name: Fetch latest cartographer-conventions version
+        uses: actions/github-script@v6
+        id: cartographer-conventions-version
+        with:
+          script: |
+            releases = await github.rest.repos.listReleases({
+              "owner": "vmware-tanzu",
+              "repo": "cartographer-conventions"
+            });
+
+            return releases.data[0].tag_name;
+          result-encoding: string
+
+      - name: Get result
+        run: echo "${{steps.cartographer-version.outputs.result}} ${{steps.cartographer-conventions-version.outputs.result}}"
+
+      - name: 🏗 Set up yq
+        uses: frenck/action-setup-yq@v1
+
+      - name: Set cartographer and cartographer-conventions versions
+        run: |
+          yq eval -i '(.directories[] | select(.contents[].githubRelease.slug == "vmware-tanzu/cartographer")).contents[].githubRelease.tag |= "${{steps.cartographer-version.outputs.result}}"' -i 'vendir.yml'
+          yq eval -i '(.directories[] | select(.contents[].githubRelease.slug == "vmware-tanzu/cartographer-conventions")).contents[].githubRelease.tag |= "${{steps.cartographer-conventions-version.outputs.result}}"' -i 'vendir.yml'
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          draft: true
