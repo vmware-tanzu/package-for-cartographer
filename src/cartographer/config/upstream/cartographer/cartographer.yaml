@@ -2786,7 +2786,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.4.3
+    app.kubernetes.io/version: v0.5.0
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2806,7 +2806,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:43dede0337be14d019b6cc3b50aea1e4022f2c71114f75f5ffbe9730769f3b70
+          image: projectcartographer/cartographer@sha256:c6e5bca54b39ec595f00f5646f809c9929322a603958805a2d826fd3cb2ee1f3
           args:
             - -cert-dir=/cert
           securityContext:
@@ -2858,6 +2858,12 @@ metadata:
   labels:
     app.kubernetes.io/component: cartographer
 rules:
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts/token
+    verbs:
+      - create
   - apiGroups:
       - carto.run
     resources:
