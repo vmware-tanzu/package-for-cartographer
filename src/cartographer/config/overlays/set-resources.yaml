@@ -22,6 +22,12 @@ metadata:
   namespace: cartographer-system
 #@ end
 
+#@ def conventions_deployment():
+kind: Deployment
+metadata:
+  name: cartographer-conventions-controller-manager
+  namespace: cartographer-system
+#@ end
 
 #@overlay/match by=overlay.subset(cartographer_deployment())
 ---
@@ -33,3 +39,14 @@ spec:
       - name: cartographer-controller
         #@overlay/match missing_ok=True
         resources: #@ data.values.cartographer.resources
+
+#@overlay/match by=overlay.subset(conventions_deployment())
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by="name"
+      - name: manager
+        #@overlay/match missing_ok=True
+        resources: #@ data.values.conventions.resources
