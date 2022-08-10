@@ -22,3 +22,7 @@ aws_iam_role_arn: ""
 cartographer:
   #@schema/type any=True
   resources: {}
+
+conventions:
+  #@schema/type any=True
+  resources: {}
