@@ -26,6 +26,7 @@ main() {
         test_no_resources_set
         test_only_limit_memory_set
         test_requests_set
+        test_requests_set_with_component_excluded
 }
 
 # validate that we're able to make use of the
@@ -100,6 +101,21 @@ EOM
         _assert_files_equal $expected $actual
 }
 
+# validate that despite a component being excluded
+# the matching still works as expected.
+#
+test_requests_set_with_component_excluded() {
+        local actual
+
+        actual=$(
+                _apply_ytt \
+                        --data-value-yaml "cartographer.resources.limits.memory=99Gi" \
+                        --data-value-yaml "excluded_components=['cartographer']"
+        )
+
+        _assert_file_empty $actual
+}
+
 _apply_ytt() {
         local args=$@
         local res_fpath=$(mktemp)
@@ -120,6 +136,16 @@ _assert_files_equal() {
         local res=$(git diff --no-index $expected $actual)
         if [[ ! -z $res ]]; then
                 echo "mismatch: $res"
+                exit 1
+        fi
+}
+
+_assert_file_empty() {
+        local fpath=$1
+
+        if [[ -s $fpath ]]; then
+                echo "expected file $fpath to be empty but wasn't"
+                exit 1
         fi
 }
 
