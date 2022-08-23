@@ -29,7 +29,7 @@ metadata:
   namespace: cartographer-system
 #@ end
 
-#@overlay/match by=overlay.subset(cartographer_deployment())
+#@overlay/match by=overlay.subset(cartographer_deployment()), expects="0+"
 ---
 spec:
   template:
@@ -40,7 +40,7 @@ spec:
         #@overlay/match missing_ok=True
         resources: #@ data.values.cartographer.resources
 
-#@overlay/match by=overlay.subset(conventions_deployment())
+#@overlay/match by=overlay.subset(conventions_deployment()), expects="0+"
 ---
 spec:
   template:
