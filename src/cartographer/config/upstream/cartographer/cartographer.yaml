@@ -1,8 +1,22 @@
+# Copyright 2022 VMware
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clusterconfigtemplates.carto.run
   labels:
@@ -180,18 +194,12 @@ spec:
           type: object
       served: true
       storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clusterdeliveries.carto.run
   labels:
@@ -386,6 +394,7 @@ spec:
                                       description: matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
                                       type: object
                                   type: object
+                                  x-kubernetes-map-type: atomic
                               required:
                                 - name
                                 - selector
@@ -525,18 +534,12 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clusterdeploymenttemplates.carto.run
   labels:
@@ -756,18 +759,12 @@ spec:
           type: object
       served: true
       storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clusterimagetemplates.carto.run
   labels:
@@ -945,18 +942,12 @@ spec:
           type: object
       served: true
       storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clusterruntemplates.carto.run
   labels:
@@ -1005,18 +996,12 @@ spec:
           type: object
       served: true
       storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clustersourcetemplates.carto.run
   labels:
@@ -1198,18 +1183,12 @@ spec:
           type: object
       served: true
       storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clustersupplychains.carto.run
   labels:
@@ -1409,6 +1388,7 @@ spec:
                                       description: matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
                                       type: object
                                   type: object
+                                  x-kubernetes-map-type: atomic
                               required:
                                 - name
                                 - selector
@@ -1548,18 +1528,12 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: clustertemplates.carto.run
   labels:
@@ -1732,18 +1706,12 @@ spec:
           type: object
       served: true
       storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: deliverables.carto.run
   labels:
@@ -2010,6 +1978,7 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                       templateRef:
                         description: TemplateRef is a reference to the template used to create the object in StampedRef
                         properties:
@@ -2035,6 +2004,7 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                     required:
                       - name
                     type: object
@@ -2048,18 +2018,12 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: runnables.carto.run
   labels:
@@ -2225,18 +2189,12 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: workloads.carto.run
   labels:
@@ -2317,6 +2275,7 @@ spec:
                                 required:
                                   - key
                                 type: object
+                                x-kubernetes-map-type: atomic
                               fieldRef:
                                 description: 'Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels[''<KEY>'']`, `metadata.annotations[''<KEY>'']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.'
                                 properties:
@@ -2329,6 +2288,7 @@ spec:
                                 required:
                                   - fieldPath
                                 type: object
+                                x-kubernetes-map-type: atomic
                               resourceFieldRef:
                                 description: 'Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.'
                                 properties:
@@ -2348,6 +2308,7 @@ spec:
                                 required:
                                   - resource
                                 type: object
+                                x-kubernetes-map-type: atomic
                               secretKeyRef:
                                 description: Selects a key of a secret in the pod's namespace
                                 properties:
@@ -2363,6 +2324,7 @@ spec:
                                 required:
                                   - key
                                 type: object
+                                x-kubernetes-map-type: atomic
                             type: object
                         required:
                           - name
@@ -2398,6 +2360,7 @@ spec:
                             required:
                               - key
                             type: object
+                            x-kubernetes-map-type: atomic
                           fieldRef:
                             description: 'Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels[''<KEY>'']`, `metadata.annotations[''<KEY>'']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.'
                             properties:
@@ -2410,6 +2373,7 @@ spec:
                             required:
                               - fieldPath
                             type: object
+                            x-kubernetes-map-type: atomic
                           resourceFieldRef:
                             description: 'Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.'
                             properties:
@@ -2429,6 +2393,7 @@ spec:
                             required:
                               - resource
                             type: object
+                            x-kubernetes-map-type: atomic
                           secretKeyRef:
                             description: Selects a key of a secret in the pod's namespace
                             properties:
@@ -2444,6 +2409,7 @@ spec:
                             required:
                               - key
                             type: object
+                            x-kubernetes-map-type: atomic
                         type: object
                     required:
                       - name
@@ -2703,6 +2669,7 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                       templateRef:
                         description: TemplateRef is a reference to the template used to create the object in StampedRef
                         properties:
@@ -2728,6 +2695,7 @@ spec:
                             description: 'UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids'
                             type: string
                         type: object
+                        x-kubernetes-map-type: atomic
                     required:
                       - name
                     type: object
@@ -2753,12 +2721,6 @@ spec:
       storage: true
       subresources:
         status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
 ---
 apiVersion: v1
 kind: Namespace
@@ -2772,7 +2734,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.5.0
+    app.kubernetes.io/version: v0.5.1
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2792,9 +2754,10 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:c6e5bca54b39ec595f00f5646f809c9929322a603958805a2d826fd3cb2ee1f3
+          image: projectcartographer/cartographer@sha256:97d45c1efaf68782a709bef898c979f10ab0f6de63aa0f6209aa3e254391c605
           args:
             - -cert-dir=/cert
+            - -metrics-port=9998
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -2813,6 +2776,24 @@ spec:
             requests:
               cpu: 500m
               memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "9998"
+    prometheus.io/scheme: http
+    prometheus.io/scrape: "true"
+  name: cartographer-controller-metrics-service
+  namespace: cartographer-system
+  labels:
+    app.kubernetes.io/component: cartographer
+spec:
+  ports:
+    - port: 9998
+      targetPort: 9998
+  selector:
+    app: cartographer-controller
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -2885,7 +2866,7 @@ rules:
       - carto.run
     resources:
       - workloads
-      - deliveries
+      - deliverables
     verbs:
       - create
       - update
@@ -2907,7 +2888,7 @@ rules:
       - carto.run
     resources:
       - workloads
-      - deliveries
+      - deliverables
     verbs:
       - get
       - list
