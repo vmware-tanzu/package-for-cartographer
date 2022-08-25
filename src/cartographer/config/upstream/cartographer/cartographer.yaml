@@ -2734,7 +2734,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.5.1
+    app.kubernetes.io/version: v0.5.2
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2754,7 +2754,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:97d45c1efaf68782a709bef898c979f10ab0f6de63aa0f6209aa3e254391c605
+          image: projectcartographer/cartographer@sha256:c28517cfeece47286802b2470339848a08d25c01ef768d8ebe266a8a78e88035
           args:
             - -cert-dir=/cert
             - -metrics-port=9998
@@ -2898,7 +2898,7 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   creationTimestamp: null
-  name: validating-webhook-configuration
+  name: cartographer-validating-webhook-configuration
   annotations:
     cert-manager.io/inject-ca-from: cartographer-system/cartographer-webhook
   labels:
@@ -3095,13 +3095,13 @@ spec:
     - cartographer-webhook.cartographer-system.svc.cluster.local
   issuerRef:
     kind: Issuer
-    name: selfsigned-issuer
+    name: cartographer-selfsigned-issuer
   secretName: cartographer-webhook
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: selfsigned-issuer
+  name: cartographer-selfsigned-issuer
   namespace: cartographer-system
   labels:
     app.kubernetes.io/component: cartographer
