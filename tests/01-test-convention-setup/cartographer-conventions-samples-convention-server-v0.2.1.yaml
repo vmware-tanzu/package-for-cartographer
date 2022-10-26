@@ -53,8 +53,8 @@ metadata:
     kbld.k14s.io/images: |
       - origins:
         - preresolved:
-            url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:800d0143031f9d3ead3b96e3b699d0eeb9f1436238221cd25aaf4ee6c8585a56
-        url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:800d0143031f9d3ead3b96e3b699d0eeb9f1436238221cd25aaf4ee6c8585a56
+            url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:45a42420b88dadb6f086c733e8f813bb1317207e20628d9dd4d4cd548011d4b8
+        url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:45a42420b88dadb6f086c733e8f813bb1317207e20628d9dd4d4cd548011d4b8
   name: webhook
   namespace: sample-conventions
 spec:
@@ -71,7 +71,7 @@ spec:
       - env:
         - name: PORT
           value: "8443"
-        image: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:800d0143031f9d3ead3b96e3b699d0eeb9f1436238221cd25aaf4ee6c8585a56
+        image: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:45a42420b88dadb6f086c733e8f813bb1317207e20628d9dd4d4cd548011d4b8
         livenessProbe:
           httpGet:
             path: /healthz
