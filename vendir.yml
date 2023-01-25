@@ -15,27 +15,30 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-  - path: ./src/cartographer/config/upstream/cartographer
-    contents:
-      - path: '.'
-        githubRelease:
-          disableAutoChecksumValidation: true
-          tag: v0.6.2
-          assetNames: ["cartographer.yaml"]
-          slug: vmware-tanzu/cartographer
-  - path: ./src/cartographer/config/upstream/cartographer-conventions
-    contents:
-      - path: '.'
-        githubRelease:
-          disableAutoChecksumValidation: true
-          tag: v0.3.0
-          assetNames: ["cartographer-conventions-v*.yaml"]
-          slug: vmware-tanzu/cartographer-conventions
-  - path: ./tests/01-test-convention-setup
-    contents:
-      - path: '.'
-        githubRelease:
-          disableAutoChecksumValidation: true
-          tag: v0.3.0
-          assetNames: ["cartographer-conventions-samples-convention-server-v*.yaml"]
-          slug: vmware-tanzu/cartographer-conventions
+- path: ./src/cartographer/config/upstream/cartographer
+  contents:
+  - path: .
+    githubRelease:
+      disableAutoChecksumValidation: true
+      tag: v0.5.5
+      assetNames:
+      - cartographer.yaml
+      slug: vmware-tanzu/cartographer
+- path: ./src/cartographer/config/upstream/cartographer-conventions
+  contents:
+  - path: .
+    githubRelease:
+      disableAutoChecksumValidation: true
+      tag: v0.3.0
+      assetNames:
+      - cartographer-conventions-v*.yaml
+      slug: vmware-tanzu/cartographer-conventions
+- path: ./tests/01-test-convention-setup
+  contents:
+  - path: .
+    githubRelease:
+      disableAutoChecksumValidation: true
+      tag: v0.3.0
+      assetNames:
+      - cartographer-conventions-samples-convention-server-v*.yaml
+      slug: vmware-tanzu/cartographer-conventions
