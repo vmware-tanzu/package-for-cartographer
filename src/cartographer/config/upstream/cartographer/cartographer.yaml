@@ -1,3 +1,17 @@
+# Copyright 2022 VMware
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -2720,7 +2734,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.5.3
+    app.kubernetes.io/version: v0.5.5
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2740,7 +2754,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:8750b8eb62f56bfb3c392c42bbc8cf0b85c44207d5fda5c6284cc3e0b022d15e
+          image: projectcartographer/cartographer@sha256:a27a7edbb6b906e3ac3d6bd882a1515789288c88c4fac658974bd73166b0b072
           args:
             - -cert-dir=/cert
             - -metrics-port=9998
