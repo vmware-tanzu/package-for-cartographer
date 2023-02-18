@@ -50,6 +50,21 @@ spec:
         cartographer:
           type: object
           properties:
+            concurrency:
+              type: object
+              properties:
+                max_workloads:
+                  type: integer
+                  description: "Optional: maximum number of Workloads to process concurrently."
+                  default: 2
+                max_deliveries:
+                  type: integer
+                  description: "Optional: maximum number of Deliverables to process concurrently."
+                  default: 2
+                max_runnables:
+                  type: integer
+                  description: "Optional: maximum number of Runnables to process concurrently."
+                  default: 2
             resources:
               type: object
               properties:
@@ -70,7 +85,7 @@ spec:
                       - type: string
                       pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                       x-kubernetes-int-or-string: true
-                      description: "Optional: maxium amount of memory to allow the controller to use"
+                      description: "Optional: maximum amount of memory to allow the controller to use"
                       default: 128Mi
                 requests:
                   type: object
@@ -114,7 +129,7 @@ spec:
                       - type: string
                       pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                       x-kubernetes-int-or-string: true
-                      description: "Optional: maxium amount of memory to allow the controller to use"
+                      description: "Optional: maximum amount of memory to allow the controller to use"
                       default: 128Mi
                 requests:
                   type: object
