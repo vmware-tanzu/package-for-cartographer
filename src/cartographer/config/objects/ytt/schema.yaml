@@ -21,9 +21,9 @@ aws_iam_role_arn: ""
 
 cartographer:
   concurrency:
-    max_workloads: 4
-    max_runnables: 1
-    max_deliveries: 1
+    max_workloads: 2
+    max_runnables: 2
+    max_deliveries: 2
   #@schema/type any=True
   resources: {}
 
