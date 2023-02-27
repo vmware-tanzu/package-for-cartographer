@@ -1,4 +1,4 @@
-#! Copyright 2020-2022 VMware Inc.
+#! Copyright 2020-2023 VMware Inc.
 #!
 #! Licensed under the Apache License, Version 2.0 (the "License");
 #! you may not use this file except in compliance with the License.
@@ -6621,8 +6621,13 @@ metadata:
     kbld.k14s.io/images: |
       - origins:
         - preresolved:
+<<<<<<<< HEAD:src/cartographer/config/upstream/cartographer-conventions/cartographer-conventions-v0.2.3.yaml
             url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:613d489917a2b5bfc77c6aad467b6ba112eae9e5349448f0d018927410f831af
         url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:613d489917a2b5bfc77c6aad467b6ba112eae9e5349448f0d018927410f831af
+========
+            url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:f944033e0b7790473ff6e285fc35f2e10fd3ecb8cf766b20ae4d369fba462580
+        url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:f944033e0b7790473ff6e285fc35f2e10fd3ecb8cf766b20ae4d369fba462580
+>>>>>>>> a700f52 (update cartographer conventions version):src/cartographer/config/upstream/cartographer-conventions/cartographer-conventions-v0.2.4.yaml
   labels:
     app.kubernetes.io/component: conventions
     control-plane: controller-manager
@@ -6648,7 +6653,11 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+<<<<<<<< HEAD:src/cartographer/config/upstream/cartographer-conventions/cartographer-conventions-v0.2.3.yaml
         image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:613d489917a2b5bfc77c6aad467b6ba112eae9e5349448f0d018927410f831af
+========
+        image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:f944033e0b7790473ff6e285fc35f2e10fd3ecb8cf766b20ae4d369fba462580
+>>>>>>>> a700f52 (update cartographer conventions version):src/cartographer/config/upstream/cartographer-conventions/cartographer-conventions-v0.2.4.yaml
         livenessProbe:
           httpGet:
             path: /healthz
