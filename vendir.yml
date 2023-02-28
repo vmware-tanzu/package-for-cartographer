@@ -28,7 +28,7 @@ directories:
       - path: '.'
         githubRelease:
           disableAutoChecksumValidation: true
-          tag: v0.3.1
+          tag: v0.3.2
           assetNames: ["cartographer-conventions-v*.yaml"]
           slug: vmware-tanzu/cartographer-conventions
   - path: ./tests/01-test-convention-setup
@@ -36,6 +36,6 @@ directories:
       - path: '.'
         githubRelease:
           disableAutoChecksumValidation: true
-          tag: v0.3.1
+          tag: v0.3.2
           assetNames: ["cartographer-conventions-samples-convention-server-v*.yaml"]
           slug: vmware-tanzu/cartographer-conventions
