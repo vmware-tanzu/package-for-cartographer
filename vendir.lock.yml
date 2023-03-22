@@ -1,4 +1,4 @@
-# Copyright 2022 VMware
+# Copyright 2023 VMware
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,16 +16,19 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - githubRelease:
-      url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/92896792
+      tag: v0.6.6
+      url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/96266240
     path: .
   path: ./src/cartographer/config/upstream/cartographer
 - contents:
   - githubRelease:
+      tag: v0.3.2
       url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/93870863
     path: .
   path: ./src/cartographer/config/upstream/cartographer-conventions
 - contents:
   - githubRelease:
+      tag: v0.3.2
       url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/93870863
     path: .
   path: ./tests/01-test-convention-setup

@@ -1,4 +1,4 @@
-# Copyright 2022 VMware
+# Copyright 2023 VMware
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -2874,7 +2874,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.6.4
+    app.kubernetes.io/version: v0.6.6
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2894,7 +2894,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:0a765ecc8d402cfc1f46912a331862a24fe4f1e4dc760a01ab6571c958d41718
+          image: projectcartographer/cartographer@sha256:bfeddc5ce660531143b281a6e969564eaec15afc254a69a7c07c2f13179c63e2
           args:
             - -cert-dir=/cert
             - -metrics-port=9998
