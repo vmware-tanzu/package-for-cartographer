@@ -89,8 +89,13 @@ With `vendir.yml` pointing at the right place, `vendir sync` takes care of
 fetching the assets we want and then placing them in the right place
 (`./upstream`).
 
+### 3. `make copyright check`
 
-### 3. Pull request
+Run `make copyright check`. This will ensure that the generated files in
+`./src/cartographer/config/upstream` are formatted with the appropriate license.
+It will also ensure that the yaml is properly formatted and linted.
+
+### 4. Pull request
 
 Having the upstream directory up to date, create a new pull request with the
 changes. 
@@ -99,7 +104,7 @@ GitHub actions will take care of packaging it all up and making sure (by
 running e2e tests) that everything is working as expected.
 
 
-### 4. Tag
+### 5. Tag
 
 Once merged, tag the commit with the desired version (for instance, in
 our example, `v0.2.2`) and push - GitHub actions will then take care of
