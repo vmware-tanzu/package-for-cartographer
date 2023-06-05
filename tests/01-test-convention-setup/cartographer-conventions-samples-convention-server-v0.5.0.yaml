@@ -1,4 +1,4 @@
-#! Copyright 2020-2023 VMware Inc.
+#! Copyright 2020-2022 VMware Inc.
 #!
 #! Licensed under the Apache License, Version 2.0 (the "License");
 #! you may not use this file except in compliance with the License.
@@ -53,8 +53,8 @@ metadata:
     kbld.k14s.io/images: |
       - origins:
         - preresolved:
-            url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:d6e3dfe66d49e8deb672b3c818a1e7cebe0d647c24b16cf9901be2c750096f27
-        url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:d6e3dfe66d49e8deb672b3c818a1e7cebe0d647c24b16cf9901be2c750096f27
+            url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:b251dd1db8eaf32df8cfb580261551614c31f82e902790da54437e4bc1e2aa19
+        url: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:b251dd1db8eaf32df8cfb580261551614c31f82e902790da54437e4bc1e2aa19
   name: webhook
   namespace: sample-conventions
 spec:
@@ -71,7 +71,7 @@ spec:
       - env:
         - name: PORT
           value: "8443"
-        image: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:d6e3dfe66d49e8deb672b3c818a1e7cebe0d647c24b16cf9901be2c750096f27
+        image: ghcr.io/vmware-tanzu/cartographer-conventions/samples@sha256:b251dd1db8eaf32df8cfb580261551614c31f82e902790da54437e4bc1e2aa19
         livenessProbe:
           httpGet:
             path: /healthz

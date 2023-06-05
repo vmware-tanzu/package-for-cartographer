@@ -22,14 +22,14 @@ directories:
   path: ./src/cartographer/config/upstream/cartographer
 - contents:
   - githubRelease:
-      tag: v0.4.1
-      url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/96496886
+      tag: v0.5.0
+      url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/107383556
     path: .
   path: ./src/cartographer/config/upstream/cartographer-conventions
 - contents:
   - githubRelease:
-      tag: v0.4.1
-      url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/96496886
+      tag: v0.5.0
+      url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/107383556
     path: .
   path: ./tests/01-test-convention-setup
 kind: LockConfig
