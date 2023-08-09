@@ -73,7 +73,7 @@ _apply_ytt() {
         local args=$@
         local res_fpath=$(mktemp)
 
-        ytt -f ./src/cartographer/ --ignore-unknown-comments $args |
+        ytt -f ./carvel/ --ignore-unknown-comments $args |
                 kapp tools inspect -f- \
                         --filter-kind-name=Deployment/cartographer-controller \
                         --raw |

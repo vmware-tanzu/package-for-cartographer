@@ -133,7 +133,7 @@ install_kapp_controller() {
 }
 
 local_ip_addr() {
-        python - <<-EOF
+        python3 - <<-EOF
 	import socket
 
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

@@ -1,0 +1,72 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+---
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: cartographer.tanzu.vmware.com.0.0.0
+spec:
+  refName: cartographer.tanzu.vmware.com
+  version: 0.0.0
+  releaseNotes: https://github.com/vmware-tanzu/package-for-cartographer/releases/
+  releasedAt: null
+  valuesSchema:
+    openAPIv3: null
+  template:
+    spec:
+      fetch:
+      - git: {}
+      template:
+        - ytt:
+            ignoreUnknownComments: true
+            paths:
+              - 'carvel'
+        - kbld: {}
+      deploy:
+        - kapp: {}
+
+---
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: cartographer.tanzu.vmware.com
+  annotations:
+    kapp.k14s.io/change-group: "carto.run/meta"
+spec:
+  displayName: Cartographer
+  providerName: VMware
+  shortDescription: Kubernetes native Supply Chain Choreographer.
+  supportDescription: https://github.com/vmware-tanzu/cartographer
+
+  longDescription: |-
+    Cartographer is a Kubernetes native Choreographer. It allows users to
+    configure K8s resources into re-usable Supply Chains that can be used to
+    define all of the stages that an Application Workload must go through to
+    get to an environment. Requires cert-manager to be installed.
+
+  maintainers:
+    - name: VMware
+
+  iconSVGBase64: |-
+    PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNIDEwIDEwIEggOTAgViA5MCBIIDEwIEwgMTAgMTAiLz48L3N2Zz4K
+
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cartographer.tanzu.vmware.com
+  annotations:
+    kapp.k14s.io/change-group: "carto.run/install"
+    kapp.k14s.io/change-rule: "upsert after upserting carto.run/meta"
+spec:
+  serviceAccountName: default
+  packageRef:
+    refName: cartographer.tanzu.vmware.com
+    versionSelection:
+      constraints: 0.0.0
+      prereleases:
+        identifiers:
+          - 'dev'
+          - 'rc'
+          - 'build'

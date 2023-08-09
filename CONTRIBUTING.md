@@ -92,7 +92,7 @@ fetching the assets we want and then placing them in the right place
 ### 3. `make copyright check`
 
 Run `make copyright check`. This will ensure that the generated files in
-`./src/cartographer/config/upstream` are formatted with the appropriate license.
+`./carvel/upstream` are formatted with the appropriate license.
 It will also ensure that the yaml is properly formatted and linted.
 
 ### 4. Pull request

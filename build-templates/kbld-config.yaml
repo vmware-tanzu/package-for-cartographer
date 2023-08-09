@@ -1,0 +1,7 @@
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+overrides:
+- image: projectcartographer/cartographer@sha256:92571feb671e76304a95b5518ab0708f11652a81a2eea09399172fc3091dccdb
+  newImage: harbor-repo.vmware.com/lever/cartographer:latest
+  preresolved: false # Expects newImage to be a tag, not a digest
