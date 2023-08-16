@@ -16,7 +16,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
+    controller-gen.kubebuilder.io/version: v0.12.0
   labels:
     app.kubernetes.io/component: conventions
   name: clusterpodconventions.conventions.carto.run
@@ -127,7 +127,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.3
+    controller-gen.kubebuilder.io/version: v0.12.0
   labels:
     app.kubernetes.io/component: conventions
     duck.knative.dev/podspecable: "true"
@@ -953,6 +953,19 @@ spec:
                                   format: int32
                                   type: integer
                               type: object
+                            resizePolicy:
+                              items:
+                                properties:
+                                  resourceName:
+                                    type: string
+                                  restartPolicy:
+                                    type: string
+                                required:
+                                - resourceName
+                                - restartPolicy
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
                             resources:
                               properties:
                                 claims:
@@ -1582,6 +1595,19 @@ spec:
                                   format: int32
                                   type: integer
                               type: object
+                            resizePolicy:
+                              items:
+                                properties:
+                                  resourceName:
+                                    type: string
+                                  restartPolicy:
+                                    type: string
+                                required:
+                                - resourceName
+                                - restartPolicy
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
                             resources:
                               properties:
                                 claims:
@@ -2218,6 +2244,19 @@ spec:
                                   format: int32
                                   type: integer
                               type: object
+                            resizePolicy:
+                              items:
+                                properties:
+                                  resourceName:
+                                    type: string
+                                  restartPolicy:
+                                    type: string
+                                required:
+                                - resourceName
+                                - restartPolicy
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
                             resources:
                               properties:
                                 claims:
@@ -4197,6 +4236,19 @@ spec:
                                   format: int32
                                   type: integer
                               type: object
+                            resizePolicy:
+                              items:
+                                properties:
+                                  resourceName:
+                                    type: string
+                                  restartPolicy:
+                                    type: string
+                                required:
+                                - resourceName
+                                - restartPolicy
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
                             resources:
                               properties:
                                 claims:
@@ -4826,6 +4878,19 @@ spec:
                                   format: int32
                                   type: integer
                               type: object
+                            resizePolicy:
+                              items:
+                                properties:
+                                  resourceName:
+                                    type: string
+                                  restartPolicy:
+                                    type: string
+                                required:
+                                - resourceName
+                                - restartPolicy
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
                             resources:
                               properties:
                                 claims:
@@ -5462,6 +5527,19 @@ spec:
                                   format: int32
                                   type: integer
                               type: object
+                            resizePolicy:
+                              items:
+                                properties:
+                                  resourceName:
+                                    type: string
+                                  restartPolicy:
+                                    type: string
+                                required:
+                                - resourceName
+                                - restartPolicy
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
                             resources:
                               properties:
                                 claims:
@@ -6700,7 +6778,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/component: conventions
   name: cartographer-conventions-manager-role
@@ -6903,8 +6980,8 @@ metadata:
     kbld.k14s.io/images: |
       - origins:
         - preresolved:
-            url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:a39e8a9f5f4a4d2b969f12958ac51c4fa4928e9349ca9c9c8cc972118d6c44b5
-        url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:a39e8a9f5f4a4d2b969f12958ac51c4fa4928e9349ca9c9c8cc972118d6c44b5
+            url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:a5bfe0b167737aa044340d55695a83f83772a62a74dce47c6db661240f360e51
+        url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:a5bfe0b167737aa044340d55695a83f83772a62a74dce47c6db661240f360e51
   labels:
     app.kubernetes.io/component: conventions
     control-plane: controller-manager
@@ -6930,7 +7007,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:a39e8a9f5f4a4d2b969f12958ac51c4fa4928e9349ca9c9c8cc972118d6c44b5
+        image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:a5bfe0b167737aa044340d55695a83f83772a62a74dce47c6db661240f360e51
         livenessProbe:
           httpGet:
             path: /healthz
