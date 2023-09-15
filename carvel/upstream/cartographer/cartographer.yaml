@@ -2860,7 +2860,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.7.3
+    app.kubernetes.io/version: v0.8.1
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2880,7 +2880,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:92571feb671e76304a95b5518ab0708f11652a81a2eea09399172fc3091dccdb
+          image: projectcartographer/cartographer@sha256:27e0b9a8eb6fd84089591d676a8da7229c85414e8cdfb34d7f836061a18764b7
           args:
             - -cert-dir=/cert
             - -metrics-port=9998

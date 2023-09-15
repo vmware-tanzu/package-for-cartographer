@@ -16,7 +16,7 @@ if [[ -z $CARTOGRAPHER_LEVER_BUILD_ID ]]; then
 fi
 
 readonly REGISTRY_HOST=${REGISTRY_HOST:-"harbor-repo.vmware.com"}
-readonly REGISTRY_PROJECT=${REGISTRY_PROJECT:-'lever/cartographer-imgpkg'}
+readonly REGISTRY_PROJECT=${REGISTRY_PROJECT:-'supply-chain-choreographer/package-for-cartographer'}
 readonly PACKAGE_GIT_COMMIT=${PACKAGE_GIT_COMMIT:-$(git rev-parse HEAD)}
 readonly PACKAGE_NAME=${PACKAGE_NAME:-'package-for-cartographer'}
 readonly PACKAGE_VERSION=${PACKAGE_VERSION:-$(git describe --tags --abbrev=0)}

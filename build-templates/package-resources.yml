@@ -1,5 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("@ytt:yaml", "yaml")
 ---
 apiVersion: data.packaging.carvel.dev/v1alpha1
 kind: Package
@@ -12,7 +11,7 @@ spec:
   releaseNotes: https://github.com/vmware-tanzu/package-for-cartographer/releases/
   releasedAt: null
   valuesSchema:
-    openAPIv3: null
+    openAPIv3: #@ data.values.components["schemas"]["dataValues"]
   template:
     spec:
       fetch:

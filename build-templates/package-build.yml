@@ -22,7 +22,7 @@ spec:
               - carvel/upstream
       export:
       - imgpkgBundle:
-          image: #@ data.values.build.registry_host + "/" + data.values.build.registry_project + "/package-for-carto-lever"
+          image: #@ data.values.build.registry_host + "/" + data.values.build.registry_project + "/package-for-cartographer"
           useKbldImagesLock: true
         includePaths:
           - carvel
