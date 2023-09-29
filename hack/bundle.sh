@@ -18,7 +18,7 @@ set -o nounset
 
 readonly root=$(cd $(dirname $0)/.. && pwd)
 
-readonly BUNDLE=${BUNDLE:?imgpkg bundle image name must be provided}
+readonly BUNDLE=${BUNDLE:-imgpkg bundle image name must be provided and assumes the repo is \'package-for-cartographer\'}
 readonly RELEASE_VERSION=${RELEASE_VERSION:-0.0.0}
 readonly SCRATCH=${SCRATCH:-$(mktemp -d)}
 readonly RELEASE_DIR=${RELEASE_DIR:-$root/release}
@@ -28,8 +28,7 @@ main() {
         cd $root
 
         show_vars
-        create_imgpkg_bundle
-        create_carvel_packaging_objects
+        create_kctrl_package
         populate_release_dir
 }
 
@@ -43,45 +42,47 @@ show_vars() {
         "
 }
 
-create_imgpkg_bundle() {
-        mkdir -p $SCRATCH/bundle/{.imgpkg,config}
+create_kctrl_package() {
+        mkdir -p $SCRATCH/package/carvel
+        cp -r ./carvel/{objects,overlays,upstream} $SCRATCH/package/carvel
+        ls $SCRATCH
 
-        cp -r ./carvel/{objects,overlays,upstream} $SCRATCH/bundle/config
-        kbld \
-                -f ./carvel/upstream \
-                --imgpkg-lock-output $SCRATCH/bundle/.imgpkg/images.yml \
-                >/dev/null
+        registry_host=$(echo $BUNDLE | cut -d'/' -f1)
+        registry_project=$(echo $BUNDLE | cut -d'/' -f2 | cut -d':' -f1)
+        tag=$(echo $BUNDLE | cut -d':' -f2)
 
-        imgpkg push -f $SCRATCH/bundle \
-                --bundle $BUNDLE \
-                --lock-output $SCRATCH/bundle.initial.lock.yaml
+        echo "registry_host: $registry_host"
+        echo "registry_project: $registry_project"
+        echo "tag: $tag"
+        echo "*** registry_repo is locked to package-for-cartographer ***"
 
-        imgpkg copy \
-                --bundle $(_image_from_lockfile $SCRATCH/bundle.initial.lock.yaml) \
-                --to-tar $SCRATCH/bundle.tar
+        ytt --ignore-unknown-comments \
+                -f ./build-templates/package-build.yml \
+                -f ./build-templates/values-schema.yaml \
+                --data-value build.registry_host=$registry_host \
+                --data-value build.registry_project=$registry_project >\
+                $SCRATCH/package/package-build.yml
 
-        imgpkg copy \
-                --tar $SCRATCH/bundle.tar \
-                --to-repo $BUNDLE \
-                --lock-output $SCRATCH/bundle.lock.yaml
-}
+        ytt --ignore-unknown-comments \
+                -f ./build-templates/package-resources.yml \
+                -f ./build-templates/values-schema.yaml \
+                --data-value build.registry_host=$registry_host \
+                --data-value build.registry_project=$registry_project >\
+                $SCRATCH/package/package-resources.yml
 
-create_carvel_packaging_objects() {
-        mkdir -p $SCRATCH/package
+        ytt --ignore-unknown-comments \
+                -f ./build-templates/kbld-config.yaml \
+                -f ./build-templates/values-schema.yaml \
+                --data-value build.registry_host=$registry_host \
+                --data-value build.registry_project=$registry_project >\
+                $SCRATCH/package/kbld-config.yaml
 
-        local image
-        image=$(_image_from_lockfile $SCRATCH/bundle.lock.yaml)
-
-        for package_fpath in ./build-templates/package*.yaml; do
-                ytt --ignore-unknown-comments \
-                        -f ./build-templates/values-schema.yaml \
-                        -f $package_fpath \
-                        --data-value image=$image \
-                        --data-value version=$RELEASE_VERSION \
-                        --data-value released_at=$RELEASE_DATE > \
-                        $SCRATCH/package/"$(basename $package_fpath)"
-        done
-
+        kctrl package release \
+                --chdir $SCRATCH/package \
+                -t $tag \
+                -v $RELEASE_VERSION \
+                -y \
+                --copy-to $SCRATCH/bundle.tar
 }
 
 populate_release_dir() {

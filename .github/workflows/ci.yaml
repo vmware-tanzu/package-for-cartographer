@@ -45,7 +45,7 @@ jobs:
 
       - name: Create and apply Package objects to the cluster
         run: |-
-          bundle=$(./hack/ci/ip.py):5000/bundle
+          bundle=$(./hack/ci/ip.py):5000/package-for-cartographer
 
           BUNDLE=$bundle ./hack/bundle.sh
           kubectl apply -f ./release
