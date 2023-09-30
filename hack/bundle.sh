@@ -80,7 +80,7 @@ create_kctrl_package() {
 
 populate_release_dir() {
         mkdir -p $RELEASE_DIR
-        cp -r $SCRATCH/package/* $RELEASE_DIR
+        cp -r $SCRATCH/package/{carvel,package-resources.yml} $RELEASE_DIR
         cp -r $SCRATCH/bundle.tar $RELEASE_DIR
 
         ls $RELEASE_DIR
