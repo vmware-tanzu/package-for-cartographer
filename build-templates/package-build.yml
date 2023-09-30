@@ -26,4 +26,3 @@ spec:
           useKbldImagesLock: true
         includePaths:
           - carvel
-
