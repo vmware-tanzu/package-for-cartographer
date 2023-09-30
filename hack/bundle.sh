@@ -75,13 +75,13 @@ create_kctrl_package() {
                 -t $TAG \
                 -v $RELEASE_VERSION \
                 -y \
-                --copy-to $SCRATCH/bundle.tar
+                --copy-to $SCRATCH/carvel-artifacts
 }
 
 populate_release_dir() {
         mkdir -p $RELEASE_DIR
-        cp -r $SCRATCH/package/{carvel,package-resources.yml} $RELEASE_DIR
-        cp -r $SCRATCH/bundle.tar $RELEASE_DIR
+        cp -r $SCRATCH/package/carvel $RELEASE_DIR
+        cp -r $SCRATCH/carvel-artifacts $RELEASE_DIR
 
         ls $RELEASE_DIR
 }

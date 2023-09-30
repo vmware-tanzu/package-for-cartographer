@@ -51,7 +51,7 @@ jobs:
           REGISTRY_PROJECT="local" \
           TAG="test" \
           ./hack/bundle.sh
-          kubectl apply -f ./release
+          kubectl apply -f ./release/carvel-artifacts/packages/cartographer.tanzu.vmware.com
 
 
       - name: Check all YAML and README Markdown
