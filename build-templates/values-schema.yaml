@@ -1,0 +1,122 @@
+#@data/values-schema
+---
+build:
+  registry_host: docker.io
+  registry_project: projectcartographer/package-for-cartographer
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: cartographer.tanzu.vmware.com.0.8.0 values schema
+paths: {}
+components:
+  schemas:
+    dataValues:
+      title: cartographer.tanzu.vmware.com.0.8.0 values schema
+      type: object
+      additionalProperties: false
+      properties:
+        #@schema/description "Optional: PEM Encoded certificate data for image registries with private CA."
+        ca_cert_data:
+          type: string
+          default: ""
+        #@schema/description "Optional: List of components to exclude from installation (e.g. [conventions])"
+        excluded_components:
+          type: array
+          items:
+            type: string
+            default: ""
+          default: [""]
+        #@schema/description "Optional: Arn role that has access to pull images from ECR container registry"
+        aws_iam_role_arn:
+          type: string
+          default: ""
+        cartographer:
+          type: object
+          additionalProperties: false
+          properties:
+            concurrency:
+              type: object
+              additionalProperties: false
+              properties:
+                #@schema/description "Optional: maximum number of Workloads to process concurrently."
+                max_workloads:
+                  type: integer
+                  default: 2
+                #@schema/description "Optional: maximum number of Runnables to process concurrently."
+                max_runnables:
+                  type: integer
+                  default: 2
+                #@schema/description "Optional: maximum number of Deliverables to process concurrently."
+                max_deliveries:
+                  type: integer
+                  default: 2
+            resources:
+              type: object
+              properties:
+                limits:
+                  type: object
+                  properties:
+                    #@schema/description "Optional: maximum amount of cpu resources to allow the controller to use"
+                    cpu:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 1000m
+                    #@schema/description "Optional: maximum amount of memory to allow the controller to use"
+                    memory:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 128Mi
+                requests:
+                  type: object
+                  properties:
+                    #@schema/description "Optional: minimum amount of cpu to reserve"
+                    cpu:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 250m
+                    #@schema/description "Optional: minimum amount of memory to reserve"
+                    memory:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 128Mi
+        conventions:
+          type: object
+          additionalProperties: false
+          properties:
+            resources:
+              type: object
+              properties:
+                limits:
+                  type: object
+                  properties:
+                    #@schema/description "Optional: maximum amount of cpu resources to allow the controller to use"
+                    cpu:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 1000m
+                    #@schema/description "Optional: maximum amount of memory to allow the controller to use"
+                    memory:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 128Mi
+                requests:
+                  type: object
+                  properties:
+                    #@schema/description "Optional: minimum amount of cpu to reserve"
+                    cpu:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 250m
+                    #@schema/description "Optional: minimum amount of memory to reserve"
+                    memory:
+                      type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                      default: 128Mi

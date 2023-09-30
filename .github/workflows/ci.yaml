@@ -35,7 +35,7 @@ jobs:
       - name: Install base dependencies
         run: |-
           sudo apt-get update && sudo apt-get install -y curl tar jq
-          ./hack/ci/install-binaries.sh grype imgpkg kbld ytt kapp tanzu whocan
+          ./hack/ci/install-binaries.sh grype imgpkg kbld ytt kapp kctrl vendir tanzu whocan
 
 
       - name: Start cluster and registry, then install dependencies
@@ -45,10 +45,13 @@ jobs:
 
       - name: Create and apply Package objects to the cluster
         run: |-
-          bundle=$(./hack/ci/ip.py):5000/bundle
+          host=$(./hack/ci/ip.py):5000
 
-          BUNDLE=$bundle ./hack/bundle.sh
-          kubectl apply -f ./release
+          REGISTRY_HOST="$host" \
+          REGISTRY_PROJECT="local" \
+          TAG="test" \
+          ./hack/bundle.sh
+          kubectl apply -f ./release/carvel-artifacts/packages/cartographer.tanzu.vmware.com
 
 
       - name: Check all YAML and README Markdown
