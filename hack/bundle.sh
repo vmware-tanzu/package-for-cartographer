@@ -18,7 +18,6 @@ set -o nounset
 
 readonly root=$(cd $(dirname $0)/.. && pwd)
 
-readonly BUNDLE=${BUNDLE:-imgpkg bundle image name must be provided and assumes the repo is \'package-for-cartographer\'}
 readonly RELEASE_VERSION=${RELEASE_VERSION:-0.0.0}
 readonly SCRATCH=${SCRATCH:-$(mktemp -d)}
 readonly RELEASE_DIR=${RELEASE_DIR:-$root/release}
@@ -34,7 +33,10 @@ main() {
 
 show_vars() {
         echo "
-        BUNDLE                  $BUNDLE
+        REGISTRY_HOST           $REGISTRY_HOST
+        REGISTRY_PROJECT        $REGISTRY_PROJECT
+        REGISTRY_REPO           locked to package-for-cartographer
+        TAG                     $TAG
         RELEASE_DATE            $RELEASE_DATE
         RELEASE_DIR             $RELEASE_DIR
         RELEASE_VERSION         $RELEASE_VERSION
@@ -47,39 +49,30 @@ create_kctrl_package() {
         cp -r ./carvel/{objects,overlays,upstream} $SCRATCH/package/carvel
         ls $SCRATCH
 
-        registry_host=$(echo $BUNDLE | cut -d'/' -f1)
-        registry_project=$(echo $BUNDLE | cut -d'/' -f2 | cut -d':' -f1)
-        tag=$(echo $BUNDLE | cut -d':' -f2)
-
-        echo "registry_host: $registry_host"
-        echo "registry_project: $registry_project"
-        echo "tag: $tag"
-        echo "*** registry_repo is locked to package-for-cartographer ***"
-
         ytt --ignore-unknown-comments \
                 -f ./build-templates/package-build.yml \
                 -f ./build-templates/values-schema.yaml \
-                --data-value build.registry_host=$registry_host \
-                --data-value build.registry_project=$registry_project >\
+                --data-value build.registry_host=$REGISTRY_HOST \
+                --data-value build.registry_project=$REGISTRY_PROJECT >\
                 $SCRATCH/package/package-build.yml
 
         ytt --ignore-unknown-comments \
                 -f ./build-templates/package-resources.yml \
                 -f ./build-templates/values-schema.yaml \
-                --data-value build.registry_host=$registry_host \
-                --data-value build.registry_project=$registry_project >\
+                --data-value build.registry_host=$REGISTRY_HOST \
+                --data-value build.registry_project=$REGISTRY_PROJECT >\
                 $SCRATCH/package/package-resources.yml
 
         ytt --ignore-unknown-comments \
                 -f ./build-templates/kbld-config.yaml \
                 -f ./build-templates/values-schema.yaml \
-                --data-value build.registry_host=$registry_host \
-                --data-value build.registry_project=$registry_project >\
+                --data-value build.registry_host=$REGISTRY_HOST \
+                --data-value build.registry_project=$REGISTRY_PROJECT >\
                 $SCRATCH/package/kbld-config.yaml
 
         kctrl package release \
                 --chdir $SCRATCH/package \
-                -t $tag \
+                -t $TAG \
                 -v $RELEASE_VERSION \
                 -y \
                 --copy-to $SCRATCH/bundle.tar
