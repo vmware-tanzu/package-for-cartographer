@@ -2874,7 +2874,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.8.1
+    app.kubernetes.io/version: v0.8.2
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2894,7 +2894,7 @@ spec:
             secretName: cartographer-webhook
       containers:
         - name: cartographer-controller
-          image: projectcartographer/cartographer@sha256:27e0b9a8eb6fd84089591d676a8da7229c85414e8cdfb34d7f836061a18764b7
+          image: projectcartographer/cartographer@sha256:f9ec1a451ee7c0294dbf4de94d869f9b06d5a9eeaea39696a35b6faa77762548
           args:
             - -cert-dir=/cert
             - -metrics-port=9998
@@ -2902,6 +2902,8 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL
