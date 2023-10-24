@@ -2,6 +2,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-- image: projectcartographer/cartographer@sha256:92571feb671e76304a95b5518ab0708f11652a81a2eea09399172fc3091dccdb
-  newImage: harbor-repo.vmware.com/lever/cartographer:latest
-  preresolved: false # Expects newImage to be a tag, not a digest
+  - image: projectcartographer/cartographer@sha256:f9ec1a451ee7c0294dbf4de94d869f9b06d5a9eeaea39696a35b6faa77762548
+    newImage: dev.registry.tanzu.vmware.com/supply-chain-choreographer/cartographer:v0
+    preresolved: false # Expects newImage to be a tag, not a digest
