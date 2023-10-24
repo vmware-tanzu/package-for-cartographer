@@ -43,6 +43,7 @@ lever_build_request() {
         --data-value bundle_name=$PACKAGE_NAME \
         --data-value build_suffix=$BUILD_SUFFIX \
         --data-value imgpkg_bundle_repo="${REGISTRY_HOST}/${REGISTRY_PROJECT}:${PACKAGE_VERSION}" \
+        --data-value imgpkg_bundle_version="${PACKAGE_VERSION}" \
         --data-value commit_ref=$PACKAGE_GIT_COMMIT \
         --data-value component_image_name=$NEW_CARTOGRAPHER_IMAGE \
         --data-value kbld_source=$OLD_CARTOGRAPHER_IMAGE \

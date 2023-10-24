@@ -23,6 +23,7 @@ spec:
   artifacts:
     imgpkgBundles:
     - name: #@ data.values.imgpkg_bundle_repo
+      version: #@ data.values.imgpkg_bundle_version
   buildConfig:
     buildpackBuildConfig: {}
     carvelPackageBuildConfig:
