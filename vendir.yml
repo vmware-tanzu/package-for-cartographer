@@ -15,7 +15,7 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-  - path: ./src/cartographer/config/upstream/cartographer
+  - path: ./carvel/upstream/cartographer
     contents:
       - path: '.'
         githubRelease:
@@ -23,7 +23,7 @@ directories:
           tag: v0.8.2
           assetNames: ["cartographer.yaml"]
           slug: vmware-tanzu/cartographer
-  - path: ./src/cartographer/config/upstream/cartographer-conventions
+  - path: ./carvel/upstream/cartographer-conventions
     contents:
       - path: '.'
         githubRelease:

@@ -25,6 +25,10 @@ readonly imgpkg_checksum=14ce0b48a3a00352cdf0ef263aa98a9bcd90d5ea8634fdf6b88016e
 readonly imgpkg_version=0.25.0
 readonly kapp_checksum=5d5c4274a130f2fd5ad11ddd8fb3e0f647c8598ba25711360207fc6eab72f6be
 readonly kapp_version=0.42.0
+readonly kctrl_checksum=c6d322ed950ddc6112c1d1dba1feeabc24f222e4a24decba2d60c02403194406
+readonly kctrl_version=0.48.1
+readonly vendir_checksum=d9109fb8f07bedab820b60e4789a2b183857073fa392cd603b9cabeac795ba04
+readonly vendir_version=0.35.0
 readonly kbld_checksum=de546ac46599e981c20ad74cd2deedf2b0f52458885d00b46b759eddb917351a
 readonly kbld_version=0.32.0
 readonly ko_checksum=0b1fa3ec34f095675d1b214e6bfde1e5b73a199378e830830ec81fec3484645e
@@ -82,6 +86,26 @@ install_kapp() {
         echo "${kapp_checksum}  $fname" | sha256sum -c
 
         install -m 0755 $fname /usr/local/bin/kapp
+}
+
+install_kctrl() {
+        local url=https://github.com/carvel-dev/kapp-controller/releases/download/v${kctrl_version}/kctrl-linux-amd64
+        local fname=kctrl-linux-amd64
+
+        curl -sSOL $url
+        echo "${kctrl_checksum}  $fname" | sha256sum -c
+
+        install -m 0755 $fname /usr/local/bin/kctrl
+}
+
+install_vendir() {
+        local url=https://github.com/carvel-dev/vendir/releases/download/v${vendir_version}/vendir-linux-amd64
+        local fname=vendir-linux-amd64
+
+        curl -sSOL $url
+        echo "${vendir_checksum}  $fname" | sha256sum -c
+
+        install -m 0755 $fname /usr/local/bin/vendir
 }
 
 install_grype() {

@@ -121,7 +121,7 @@ _apply_ytt() {
         local res_fpath=$(mktemp)
         local deployment=cartographer-conventions-controller-manager
 
-        ytt -f ./src/cartographer/ --ignore-unknown-comments $args |
+        ytt -f ./carvel/ --ignore-unknown-comments $args |
                 kapp tools inspect -f- \
                         --filter-kind-name=Deployment/$deployment \
                         --raw |

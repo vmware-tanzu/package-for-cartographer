@@ -18,7 +18,6 @@ set -o nounset
 
 readonly root=$(cd $(dirname $0)/.. && pwd)
 
-readonly BUNDLE=${BUNDLE:?imgpkg bundle image name must be provided}
 readonly RELEASE_VERSION=${RELEASE_VERSION:-0.0.0}
 readonly SCRATCH=${SCRATCH:-$(mktemp -d)}
 readonly RELEASE_DIR=${RELEASE_DIR:-$root/release}
@@ -28,14 +27,16 @@ main() {
         cd $root
 
         show_vars
-        create_imgpkg_bundle
-        create_carvel_packaging_objects
+        create_kctrl_package
         populate_release_dir
 }
 
 show_vars() {
         echo "
-        BUNDLE                  $BUNDLE
+        REGISTRY_HOST           $REGISTRY_HOST
+        REGISTRY_PROJECT        $REGISTRY_PROJECT
+        REGISTRY_REPO           locked to package-for-cartographer
+        TAG                     $TAG
         RELEASE_DATE            $RELEASE_DATE
         RELEASE_DIR             $RELEASE_DIR
         RELEASE_VERSION         $RELEASE_VERSION
@@ -43,51 +44,44 @@ show_vars() {
         "
 }
 
-create_imgpkg_bundle() {
-        mkdir -p $SCRATCH/bundle/{.imgpkg,config}
+create_kctrl_package() {
+        mkdir -p $SCRATCH/package/carvel
+        cp -r ./carvel/{objects,overlays,upstream} $SCRATCH/package/carvel
+        ls $SCRATCH
 
-        cp -r ./src/cartographer/config/{objects,overlays,upstream} $SCRATCH/bundle/config
-        kbld \
-                -f ./src/cartographer/config/upstream \
-                --imgpkg-lock-output $SCRATCH/bundle/.imgpkg/images.yml \
-                >/dev/null
+        ytt --ignore-unknown-comments \
+                -f ./build-templates/package-build.yml \
+                -f ./build-templates/values-schema.yaml \
+                --data-value build.registry_host=$REGISTRY_HOST \
+                --data-value build.registry_project=$REGISTRY_PROJECT >\
+                $SCRATCH/package/package-build.yml
 
-        imgpkg push -f $SCRATCH/bundle \
-                --bundle $BUNDLE \
-                --lock-output $SCRATCH/bundle.initial.lock.yaml
+        ytt --ignore-unknown-comments \
+                -f ./build-templates/package-resources.yml \
+                -f ./build-templates/values-schema.yaml \
+                --data-value build.registry_host=$REGISTRY_HOST \
+                --data-value build.registry_project=$REGISTRY_PROJECT >\
+                $SCRATCH/package/package-resources.yml
 
-        imgpkg copy \
-                --bundle $(_image_from_lockfile $SCRATCH/bundle.initial.lock.yaml) \
-                --to-tar $SCRATCH/bundle.tar
+        ytt --ignore-unknown-comments \
+                -f ./build-templates/kbld-config.yaml \
+                -f ./build-templates/values-schema.yaml \
+                --data-value build.registry_host=$REGISTRY_HOST \
+                --data-value build.registry_project=$REGISTRY_PROJECT >\
+                $SCRATCH/package/kbld-config.yaml
 
-        imgpkg copy \
-                --tar $SCRATCH/bundle.tar \
-                --to-repo $BUNDLE \
-                --lock-output $SCRATCH/bundle.lock.yaml
-}
-
-create_carvel_packaging_objects() {
-        mkdir -p $SCRATCH/package
-
-        local image
-        image=$(_image_from_lockfile $SCRATCH/bundle.lock.yaml)
-
-        for package_fpath in ./packaging/package*.yaml; do
-                ytt --ignore-unknown-comments \
-                        -f ./packaging/values.yaml \
-                        -f $package_fpath \
-                        --data-value image=$image \
-                        --data-value version=$RELEASE_VERSION \
-                        --data-value released_at=$RELEASE_DATE > \
-                        $SCRATCH/package/"$(basename $package_fpath)"
-        done
-
+        kctrl package release \
+                --chdir $SCRATCH/package \
+                -t $TAG \
+                -v $RELEASE_VERSION \
+                -y \
+                --copy-to $SCRATCH/carvel-artifacts
 }
 
 populate_release_dir() {
         mkdir -p $RELEASE_DIR
-        cp -r $SCRATCH/package/* $RELEASE_DIR
-        cp -r $SCRATCH/bundle.tar $RELEASE_DIR
+        cp -r $SCRATCH/package/carvel $RELEASE_DIR
+        cp -r $SCRATCH/carvel-artifacts $RELEASE_DIR
 
         ls $RELEASE_DIR
 }

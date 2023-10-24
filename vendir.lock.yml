@@ -19,13 +19,13 @@ directories:
       tag: v0.8.2
       url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/123356497
     path: .
-  path: ./src/cartographer/config/upstream/cartographer
+  path: ./carvel/upstream/cartographer
 - contents:
   - githubRelease:
       tag: v0.6.0
       url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/126309073
     path: .
-  path: ./src/cartographer/config/upstream/cartographer-conventions
+  path: ./carvel/upstream/cartographer-conventions
 - contents:
   - githubRelease:
       tag: v0.6.0
