@@ -6992,8 +6992,8 @@ metadata:
     kbld.k14s.io/images: |
       - origins:
         - preresolved:
-            url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:5cd1ae92f534ff935fbaf992b8308aa3dac3d1b6cbc8cf8a88221c8c92540f66
-        url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:5cd1ae92f534ff935fbaf992b8308aa3dac3d1b6cbc8cf8a88221c8c92540f66
+            url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:b12e17a57d204bb59b19818f561c92e9d5613444160d9a60f723aaa735215eb5
+        url: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:b12e17a57d204bb59b19818f561c92e9d5613444160d9a60f723aaa735215eb5
   labels:
     app.kubernetes.io/component: conventions
     control-plane: controller-manager
@@ -7019,7 +7019,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:5cd1ae92f534ff935fbaf992b8308aa3dac3d1b6cbc8cf8a88221c8c92540f66
+        image: ghcr.io/vmware-tanzu/cartographer-conventions/bundle@sha256:b12e17a57d204bb59b19818f561c92e9d5613444160d9a60f723aaa735215eb5
         livenessProbe:
           httpGet:
             path: /healthz
@@ -7036,7 +7036,7 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 256Mi
+            memory: 512Mi
           requests:
             cpu: 100m
             memory: 20Mi
