@@ -46,7 +46,7 @@ jobs:
       - name: Create and apply Package objects to the cluster
         run: |-
           host=$(./hack/ci/ip.py):5000
-          echo "$TANZUNET_PASSWORD" |  docker login dev.registry.tanzu.vmware.com -u "$TANZUNET_USERNAME" --password-stdin
+          echo "$TANZUNET_PASSWORD" |  docker login dev.registry.tanzu.vmware.com --username "$TANZUNET_USERNAME" --password-stdin
 
           REGISTRY_HOST="$host" \
           REGISTRY_PROJECT="local" \
