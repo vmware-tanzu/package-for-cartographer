@@ -2875,7 +2875,7 @@ metadata:
   namespace: cartographer-system
   labels:
     app.kubernetes.io/name: cartographer-controller
-    app.kubernetes.io/version: v0.8.6
+    app.kubernetes.io/version: v0.8.7
     app.kubernetes.io/component: cartographer
 spec:
   selector:
@@ -2895,7 +2895,7 @@ spec:
           secretName: cartographer-webhook
       containers:
       - name: cartographer-controller
-        image: dev.registry.tanzu.vmware.com/supply-chain-choreographer/cartographer:v0.8.6
+        image: dev.registry.tanzu.vmware.com/supply-chain-choreographer/cartographer:v0.8.7
         args:
         - -cert-dir=/cert
         - -metrics-port=9998
