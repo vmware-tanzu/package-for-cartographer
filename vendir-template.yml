@@ -24,19 +24,3 @@ directories:
           tag: #@ data.values.cartographer_version
           assetNames: ["cartographer.yaml"]
           slug: vmware-tanzu/cartographer
-  - path: ./carvel/upstream/cartographer-conventions
-    contents:
-      - path: '.'
-        githubRelease:
-          disableAutoChecksumValidation: true
-          tag: v0.3.0
-          assetNames: ["cartographer-conventions-v*.yaml"]
-          slug: vmware-tanzu/cartographer-conventions
-  - path: ./tests/01-test-convention-setup
-    contents:
-      - path: '.'
-        githubRelease:
-          disableAutoChecksumValidation: true
-          tag: v0.3.0
-          assetNames: ["cartographer-conventions-samples-convention-server-v*.yaml"]
-          slug: vmware-tanzu/cartographer-conventions
