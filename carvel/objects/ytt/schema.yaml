@@ -26,7 +26,3 @@ cartographer:
     max_deliveries: 2
   #@schema/type any=True
   resources: {}
-
-conventions:
-  #@schema/type any=True
-  resources: {}

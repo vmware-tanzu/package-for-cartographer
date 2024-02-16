@@ -46,13 +46,6 @@ point at the new release of Cartographer
 │           └── upstream
 │               ├── cartographer
 │               │   └── cartographer.yaml                                                     """ vendir'ed file """
-│               └── cartographer-conventions
-│                   └── cartographer-conventions-v0.1.0-build.1.yaml                          """ vendir'ed file """
-├── tests
-│   ├── ...
-│   ├── 01-test-convention-setup
-│   │   └── cartographer-conventions-samples-convention-server-v0.1.0-build.1.yaml            """ vendir'ed file """
-│   ├── ...
 ├── vendir.lock.yml
 └── vendir.yml            """ this file """
 ```

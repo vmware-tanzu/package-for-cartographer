@@ -20,16 +20,4 @@ directories:
       url: https://api.github.com/repos/vmware-tanzu/cartographer/releases/123356497
     path: .
   path: ./carvel/upstream/cartographer
-- contents:
-  - githubRelease:
-      tag: v0.7.0
-      url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/134912886
-    path: .
-  path: ./carvel/upstream/cartographer-conventions
-- contents:
-  - githubRelease:
-      tag: v0.7.0
-      url: https://api.github.com/repos/vmware-tanzu/cartographer-conventions/releases/134912886
-    path: .
-  path: ./tests/01-test-convention-setup
 kind: LockConfig
