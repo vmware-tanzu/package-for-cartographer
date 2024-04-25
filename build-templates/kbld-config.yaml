@@ -2,6 +2,6 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 overrides:
-  - image: dev.registry.tanzu.vmware.com/supply-chain-choreographer/cartographer:v0.8.10
-    newImage: dev.registry.tanzu.vmware.com/supply-chain-choreographer/cartographer:v0.8.10
+  - image: dev.registry.tanzu.vmware.com/supply-chain-choreographer/cartographer:v0.8.11
+    newImage: dev.registry.tanzu.vmware.com/supply-chain-choreographer/cartographer:v0.8.11
     preresolved: false # Expects newImage to be a tag, not a digest
